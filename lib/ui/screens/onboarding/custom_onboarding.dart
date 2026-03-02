@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:movies/ui/utils/app_colors.dart';
 import 'package:movies/ui/utils/app_routes.dart';
+import 'package:movies/ui/utils/app_theme.dart';
+import 'package:movies/ui/utils/extension/context_extension.dart';
+import 'package:movies/ui/utils/extension/int_extensions.dart';
 
 class MovieOnboarding extends StatefulWidget {
   const MovieOnboarding({super.key});
@@ -10,17 +13,24 @@ class MovieOnboarding extends StatefulWidget {
 }
 
 class _MovieOnboardingState extends State<MovieOnboarding> {
-  @override
-  void dispose() {
-    _controller.dispose(); // تنظيف ال controller عند إغلاق الشاشة
-    super.dispose();
-  }
-
   final PageController _controller = PageController();
   int currentIndex = 0;
 
-  final Color primaryYellow = AppColors.goldenYellow;
-  final Color darkBgColor = AppColors.darkRed;
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  // صور التدرج (Gradient) للصفحات
+  final List<String> gradientImages = [
+    "assets/images/on_2.png",
+    "assets/images/on_2.png",
+    "assets/images/on_3.png",
+    "assets/images/on_4.png",
+    "assets/images/on_5.png",
+    "assets/images/on_6.png",
+  ];
 
   final List<Map<String, String>> onboardingData = [
     {
@@ -71,187 +81,164 @@ class _MovieOnboardingState extends State<MovieOnboarding> {
       backgroundColor: AppColors.black,
       body: Stack(
         children: [
-          /// الخلفية (الصور)
+          // 1. صور الخلفية والـ PageView (الطبقة السفلية)
           PageView.builder(
             controller: _controller,
             onPageChanged: (index) => setState(() => currentIndex = index),
             itemCount: onboardingData.length,
-            itemBuilder: (context, index) {
-              return Image.asset(
-                onboardingData[index]['image']!,
-                fit: BoxFit.fill,
-              );
-            },
+            itemBuilder: (context, index) => Image.asset(
+              onboardingData[index]['image']!,
+              fit: BoxFit.cover,
+              width: double.infinity,
+              height: double.infinity,
+            ),
           ),
 
-          /// تدرج فوق الصورة (ما عدا الصفحة الأولى)
+          // 2. تدرج فوق الصورة للصفحات الأخرى (باستثناء الصفحة الأولى)
           if (currentIndex != 0)
             Positioned.fill(
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      AppColors.transparent,
-                      AppColors.black.withValues(alpha: 0.45),
-                    ],
-                  ),
-                ),
+              child: Image.asset(
+                gradientImages[currentIndex],
+                fit: BoxFit.cover,
               ),
             ),
 
-          /// المحتوى السفلي
-          currentIndex == 0 ? _buildFirstPage() : _buildOtherPages(),
+          // 3. المحتوى السفلي (الطبقة العلوية)
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: currentIndex == 0 ? _buildFirstPage() : _buildOtherPages(),
+          ),
         ],
       ),
     );
   }
 
-  // المحتوى السفلي
-  // ================= PAGE 1 IN ONBOARDING=================
+  // ================= PAGE 1 IN ONBOARDING =================
   Widget _buildFirstPage() {
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [AppColors.transparent, AppColors.black],
-          ),
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Colors.transparent, AppColors.black],
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            onboardingData[0]['title']!,
+            textAlign: TextAlign.center,
+            style: AppTheme.darkTheme.textTheme.displayLarge,
+          ),
+          16.verticalSpace(),
+          Text(
+            onboardingData[0]['subtitle']!,
+            textAlign: TextAlign.center,
+            style: AppTheme.darkTheme.textTheme.titleSmall,
+          ),
+          32.verticalSpace(),
+          _buildButton(
+            text: onboardingData[0]['mainButton']!,
+            color: AppColors.goldenYellow,
+            textColor: AppColors.black,
+            onPressed: () {
+              _controller.nextPage(
+                duration: const Duration(milliseconds: 400),
+                curve: Curves.easeInOut,
+              );
+            },
+          ),
+          const SizedBox(height: 30),
+        ],
+      ),
+    );
+  }
+
+  // ================= OTHER PAGES IN ONBOARDING =================
+  Widget _buildOtherPages() {
+    return Container(
+      width: double.infinity,
+      // تأكد أن الـ padding لا يغطي الجزء العلوي الذي نريده دائرياً
+      padding: const EdgeInsets.fromLTRB(24, 20, 24, 30),
+      decoration: const BoxDecoration(
+        color: AppColors.black, // لون صلب ليغطي الصورة
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(40),
+          topRight: Radius.circular(40),
+        ),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // مؤشر بسيط للصفحات (اختياري، يضيف لمسة جمالية)
+          Container(
+            width: 40,
+            height: 4,
+            decoration: BoxDecoration(
+              color: AppColors.white.withOpacity(0.3),
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+          16.verticalSpace(),
+
+          Text(
+            onboardingData[currentIndex]['title']!,
+            textAlign: TextAlign.center,
+            style: context.textTheme.titleLarge?.copyWith(fontSize: 28),
+          ),
+          16.verticalSpace(),
+
+          if (onboardingData[currentIndex].containsKey('subtitle')) ...[
             Text(
-              onboardingData[0]['title']!,
+              onboardingData[currentIndex]['subtitle']!,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: AppColors.white,
-                fontSize: 36, // Medium 36
-                fontWeight: FontWeight.w500, // Medium
-                fontFamily: "Inter",
-                height: 1.2,
+              style: context.textTheme.bodyLarge?.copyWith(
+                color: AppColors.white.withOpacity(0.7),
               ),
             ),
-            const SizedBox(height: 16),
-            Text(
-              onboardingData[0]['subtitle']!,
-              textAlign: TextAlign.center,
-              style:
-                  const TextStyle(
-                    color: AppColors.white,
-                    fontSize: 20,
-                    // height: 1.3,
-                    fontFamily: "Inter",
-                  ).copyWith(
-                    color: AppColors.white.withValues(alpha: 0.6), // 60% شفافية
-                  ),
-            ),
-            const SizedBox(height: 32),
-            _buildButton(
-              text: onboardingData[0]['mainButton']!,
-              color: primaryYellow,
-              textColor: AppColors.black,
-              onPressed: () {
+            30.verticalSpace(),
+          ],
+
+          _buildButton(
+            text: onboardingData[currentIndex]['mainButton']!,
+            color: AppColors.goldenYellow,
+            textColor: AppColors.black,
+            onPressed: () {
+              if (currentIndex < onboardingData.length - 1) {
                 _controller.nextPage(
+                  duration: const Duration(milliseconds: 400),
+                  curve: Curves.easeInOut,
+                );
+              } else {
+                Navigator.pushReplacementNamed(context, AppRoutes.login);
+              }
+            },
+          ),
+
+          if (currentIndex > 1) ...[
+            15.verticalSpace(),
+            _buildButton(
+              text: "Back",
+              color: Colors.transparent,
+              textColor: AppColors.goldenYellow,
+              isOutlined: true,
+              onPressed: () {
+                _controller.previousPage(
                   duration: const Duration(milliseconds: 400),
                   curve: Curves.easeInOut,
                 );
               },
             ),
           ],
-        ),
+        ],
       ),
     );
   }
 
-  //المحتوى السفلي
-  // ================= OTHER PAGES IN ONBOARDING =================
-  Widget _buildOtherPages() {
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 30),
-        decoration: BoxDecoration(
-          color: AppColors.black,
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(40),
-            topRight: Radius.circular(40),
-          ),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              onboardingData[currentIndex]['title']!,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: AppColors.white,
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 16),
-            if (onboardingData[currentIndex].containsKey('subtitle')) ...[
-              const SizedBox(height: 16),
-              Text(
-                onboardingData[currentIndex]['subtitle']!,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  color: AppColors.white,
-                  fontSize: 18,
-                  height: 1.3,
-                  fontFamily: "Inter",
-                ),
-              ),
-            ],
-            const SizedBox(height: 10),
-
-            //----------------BUTTONS--------------------
-            _buildButton(
-              text: onboardingData[currentIndex]['mainButton']!,
-              color: primaryYellow,
-              textColor: AppColors.black,
-              onPressed: () {
-                if (currentIndex < onboardingData.length - 1) {
-                  _controller.nextPage(
-                    duration: const Duration(milliseconds: 400),
-                    curve: Curves.easeInOut,
-                  );
-                } else {
-                  Navigator.pushReplacementNamed(context, AppRoutes.login);
-                }
-              },
-            ),
-
-            /// زر Back يبدأ من الصفحة الثالثة فقط
-            if (currentIndex > 1) ...[
-              const SizedBox(height: 15),
-              _buildButton(
-                text: "Back",
-                color: AppColors.transparent,
-                textColor: primaryYellow,
-                isOutlined: true,
-                onPressed: () {
-                  _controller.previousPage(
-                    duration: const Duration(milliseconds: 400),
-                    curve: Curves.easeInOut,
-                  );
-                },
-              ),
-            ],
-          ],
-        ),
-      ),
-    );
-  }
-
-  // ================= BUTTON =================
+  // ================= GENERAL BUTTON =================
   Widget _buildButton({
     required String text,
     required Color color,
@@ -264,8 +251,10 @@ class _MovieOnboardingState extends State<MovieOnboarding> {
       height: 56,
       child: OutlinedButton(
         style: OutlinedButton.styleFrom(
-          backgroundColor: isOutlined ? AppColors.transparent : color,
-          side: isOutlined ? BorderSide(color: primaryYellow) : BorderSide.none,
+          backgroundColor: isOutlined ? Colors.transparent : color,
+          side: isOutlined
+              ? const BorderSide(color: AppColors.goldenYellow)
+              : BorderSide.none,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
@@ -274,8 +263,8 @@ class _MovieOnboardingState extends State<MovieOnboarding> {
         child: Text(
           text,
           style: TextStyle(
-            color: textColor,
             fontSize: 18,
+            color: textColor,
             fontWeight: FontWeight.bold,
           ),
         ),

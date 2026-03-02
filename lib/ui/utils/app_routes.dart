@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:movies/ui/screens/login/login_screen.dart';
 import 'package:movies/ui/screens/navigation/tabs/moveis/movies_home.dart';
 import 'package:movies/ui/screens/onboarding/custom_onboarding.dart';
+import 'package:movies/ui/screens/register/register.dart';
 import 'package:movies/ui/screens/splash/custom_splash.dart';
 
 abstract final class AppRoutes {
@@ -26,7 +27,9 @@ class AppRouter {
           builder: (_) => const LoginScreen(),
         ); // شاشة تسجيل الدخول
       // case AppRoutes.register:
-      //   return MaterialPageRoute(builder: (_) => const RegisterScreen()); // شاشة التسجيل
+      //   return MaterialPageRoute(
+      //     builder: (_) => const RegisterScreen(),
+      //   ); // شاشة التسجيل
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

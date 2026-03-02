@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movies/ui/utils/app_colors.dart';
+import 'package:movies/ui/utils/extension/int_extensions.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -21,20 +22,16 @@ class _LoginScreenState extends State<LoginScreen> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                const SizedBox(height: 30),
+                30.verticalSpace(),
 
                 /// LOGO
-                Image.asset(
-                  "assets/images/main_logo.png",
-                  width: 121,
-                  height: 118,
-                ),
-                SizedBox(height: 30),
+                Image.asset("assets/images/logo.png", width: 121, height: 118),
+                30.verticalSpace(),
 
                 /// EMAIL
                 _inputField(hint: "Email", icon: Icons.email_sharp),
 
-                const SizedBox(height: 16),
+                16.verticalSpace(),
 
                 /// PASSWORD
                 _inputField(
@@ -52,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
 
-                const SizedBox(height: 10),
+                10.verticalSpace(),
 
                 /// FORGET PASSWORD
                 Align(
@@ -67,12 +64,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
 
-                const SizedBox(height: 24),
+                24.verticalSpace(),
 
                 /// LOGIN BUTTON
                 _mainButton(text: "Login", onTap: () {}),
 
-                const SizedBox(height: 16),
+                16.verticalSpace(),
 
                 /// CREATE ACCOUNT
                 Row(
@@ -85,18 +82,26 @@ class _LoginScreenState extends State<LoginScreen> {
                         color: AppColors.white,
                       ),
                     ),
-                    Text(
-                      "Create One",
-                      style: TextStyle(
-                        fontFamily: "Roboto",
-                        color: AppColors.goldenYellow,
-                        fontWeight: FontWeight.w600,
+                    InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          '/register',
+                        ); // Assuming you have a route for registration
+                      },
+                      child: Text(
+                        "Create One",
+                        style: TextStyle(
+                          fontFamily: "Roboto",
+                          color: AppColors.goldenYellow,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ],
                 ),
 
-                const SizedBox(height: 24),
+                24.verticalSpace(),
 
                 /// OR
                 Row(
@@ -126,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
 
-                const SizedBox(height: 24),
+                24.verticalSpace(),
 
                 /// GOOGLE LOGIN
                 _mainButton(
@@ -135,7 +140,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   onTap: () {},
                 ),
 
-                const SizedBox(height: 30),
+                30.verticalSpace(),
 
                 /// LANGUAGE SWITCH
                 Container(

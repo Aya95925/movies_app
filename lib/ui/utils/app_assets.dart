@@ -1,0 +1,24 @@
+// abstract final class AppAssets {
+//   static const String = 'assets/images/';
+//   static const String = 'assets/images/';
+//   static const String = 'assets/images/';
+//   static const String = 'assets/images/';
+//   static const String = 'assets/images/';
+//   static const String = 'assets/images/';
+//   static const String = 'assets/images/';
+//   static const String = 'assets/images/';
+//   static const String = 'assets/images/';
+//   static const String = 'assets/images/';
+//   static const String = 'assets/images/';
+//   static const String = 'assets/images/';
+//   static const String = 'assets/images/';
+//   static const String = 'assets/images/';
+//   static const String = 'assets/images/';
+//   static const String = 'assets/images/';
+//   static const String = 'assets/images/';
+//   static const String = 'assets/images/';
+//   static const String = 'assets/images/';
+//   static const String = 'assets/images/';
+//   static const String = 'assets/images/';
+//   static const String = 'assets/images/';
+// }
