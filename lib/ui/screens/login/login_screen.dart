@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:movies/ui/utils/app_assets.dart';
 import 'package:movies/ui/utils/app_colors.dart';
+import 'package:movies/ui/utils/app_routes.dart';
 import 'package:movies/ui/utils/extension/int_extensions.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -25,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 30.verticalSpace(),
 
                 /// LOGO
-                Image.asset("assets/images/logo.png", width: 121, height: 118),
+                Image.asset(AppAssets.logo, width: 121, height: 118),
                 30.verticalSpace(),
 
                 /// EMAIL
@@ -54,12 +56,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 /// FORGET PASSWORD
                 Align(
                   alignment: Alignment.centerRight,
-                  child: Text(
-                    "Forget Password ?",
-                    style: TextStyle(
-                      fontFamily: "Roboto",
-                      color: AppColors.goldenYellow,
-                      fontSize: 13,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(context, AppRoutes.forgetPassword());
+                    },
+                    child: Text(
+                      "Forget Password ?",
+                      style: TextStyle(
+                        fontFamily: "Roboto",
+                        color: AppColors.goldenYellow,
+                        fontSize: 13,
+                      ),
                     ),
                   ),
                 ),
@@ -84,10 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     InkWell(
                       onTap: () {
-                        Navigator.pushNamed(
-                          context,
-                          '/register',
-                        ); // Assuming you have a route for registration
+                        Navigator.push(context, AppRoutes.register());
                       },
                       child: Text(
                         "Create One",
@@ -136,7 +140,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 /// GOOGLE LOGIN
                 _mainButton(
                   text: "Login With Google",
-                  icon: Image.asset("assets/images/icon_google.png", width: 22),
+                  icon: Image.asset(AppAssets.iconGoogle, width: 22),
                   onTap: () {},
                 ),
 
@@ -158,12 +162,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       CircleAvatar(
                         radius: 15,
-                        backgroundImage: AssetImage("assets/images/usa.png"),
+                        backgroundImage: AssetImage(AppAssets.usaFlag),
                       ),
                       const SizedBox(width: 8),
                       CircleAvatar(
                         radius: 15,
-                        backgroundImage: AssetImage("assets/images/egypt.png"),
+                        backgroundImage: AssetImage(AppAssets.egyptFlag),
                       ),
                     ],
                   ),

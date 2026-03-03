@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:movies/ui/utils/app_routes.dart';
+import 'package:movies/ui/screens/splash/custom_splash.dart';
 
 void main() {
   // وظيفته تجهيز محرك فلاتر والاتصال بنظام التشغيل قبل بدء التطبيق.
@@ -17,9 +17,25 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: AppRoutes.splash,
+      // initialRoute: "/",
+      home: const CustomSplashScreen(),
 
-      onGenerateRoute: AppRouter.onGenerateRoute,
+      // onGenerateRoute: (settings) {
+      //   switch (settings.name) {
+      //     case "/":
+      //       return AppRoutes.splash();
+      //     case "/onboarding":
+      //       return AppRoutes.onboarding();
+      //     case "/moviesHome":
+      //       return AppRoutes.moviesHome();
+      //     case "/login":
+      //       return AppRoutes.login();
+      //     case "/register":
+      //       return AppRoutes.register();
+      //     default:
+      //       return AppRoutes.unDefinedRoute();
+      //   }
+      // },
     );
   }
 }

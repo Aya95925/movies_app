@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:movies/ui/utils/app_routes.dart';
 
 class CustomSplashScreen extends StatefulWidget {
   const CustomSplashScreen({super.key});
@@ -19,7 +20,7 @@ class _CustomSplashScreenState extends State<CustomSplashScreen> {
 
     // الانتقال للأونبوردينج بعد 3 ثواني
     Timer(Duration(seconds: 3), () {
-      Navigator.pushReplacementNamed(context, '/onboarding');
+      Navigator.pushReplacement(context, AppRoutes.onboarding());
     });
   }
 

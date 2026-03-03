@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:movies/ui/utils/app_assets.dart';
 import 'package:movies/ui/utils/app_colors.dart';
-import 'package:movies/ui/utils/app_theme.dart';
-import 'package:movies/ui/utils/extension/context_extension.dart';
+import 'package:movies/ui/utils/app_routes.dart';
 import 'package:movies/ui/utils/extension/int_extensions.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -12,24 +12,25 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  bool obscure = true;
+  bool obscurePassword = true;
+  bool obscureConfirmPassword = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.black, // AppColors.black
+      backgroundColor: AppColors.black,
       appBar: AppBar(
-        backgroundColor: AppColors.transparent,
+        centerTitle: true,
         elevation: 0,
+        title: const Text(
+          "Register",
+          style: TextStyle(fontFamily: "Roboto", color: AppColors.goldenYellow),
+        ),
+        backgroundColor: AppColors.transparent,
         leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios_new,
-            color: AppColors.goldenYellow,
-          ),
+          icon: const Icon(Icons.arrow_back, color: AppColors.goldenYellow),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text("Register", style: context.textTheme.bodyMedium),
-        centerTitle: true,
       ),
       body: SafeArea(
         child: Padding(
@@ -37,35 +38,47 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                20.verticalSpace(),
+                10.verticalSpace(),
 
-                /// LOGO
-                Image.asset(
-                  "assets/images/main_logo.png",
-                  width: 121,
-                  height: 118,
+                /// AVATAR SELECTION SECTION
+                Center(
+                  child: Image.asset(
+                    AppAssets.avatar, // تأكد من اسم الملف الصحيح
+                    height: 100,
+                    fit: BoxFit.contain,
+                  ),
                 ),
-                30.verticalSpace(),
+                const Text(
+                  "Avatar",
+                  style: TextStyle(
+                    color: AppColors.white,
+                    fontSize: 16,
+                    fontFamily: "Roboto",
+                  ),
+                ),
+                12.verticalSpace(),
 
                 /// NAME FIELD
-                _inputField(hint: "Name", icon: Icons.person_sharp),
-                const SizedBox(height: 16),
+                _inputField(hint: "Name", icon: Icons.badge_outlined),
+                16.verticalSpace(),
 
                 /// EMAIL FIELD
-                _inputField(hint: "Email", icon: Icons.email_sharp),
+                _inputField(hint: "Email", icon: Icons.email),
                 16.verticalSpace(),
 
                 /// PASSWORD FIELD
                 _inputField(
                   hint: "Password",
-                  icon: Icons.lock_sharp,
+                  icon: Icons.lock,
                   isPassword: true,
+                  obscure: obscurePassword,
                   suffix: IconButton(
                     icon: Icon(
-                      obscure ? Icons.visibility_off : Icons.visibility,
+                      obscurePassword ? Icons.visibility_off : Icons.visibility,
                       color: AppColors.white,
                     ),
-                    onPressed: () => setState(() => obscure = !obscure),
+                    onPressed: () =>
+                        setState(() => obscurePassword = !obscurePassword),
                   ),
                 ),
                 16.verticalSpace(),
@@ -73,46 +86,61 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 /// CONFIRM PASSWORD FIELD
                 _inputField(
                   hint: "Confirm Password",
-                  icon: Icons.lock_sharp,
+                  icon: Icons.lock,
                   isPassword: true,
+                  obscure: obscureConfirmPassword,
+                  suffix: IconButton(
+                    icon: Icon(
+                      obscureConfirmPassword
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                      color: AppColors.white,
+                    ),
+                    onPressed: () => setState(
+                      () => obscureConfirmPassword = !obscureConfirmPassword,
+                    ),
+                  ),
                 ),
-
                 16.verticalSpace(),
 
-                /// PHONE FIELD
-                _inputField(hint: "Phone Number", icon: Icons.phone_sharp),
-
-                30.verticalSpace(),
+                /// PHONE NUMBER FIELD
+                _inputField(hint: "Phone Number", icon: Icons.phone),
+                16.verticalSpace(),
 
                 /// CREATE ACCOUNT BUTTON
-                _mainButton(text: "Create Account", onTap: () {}),
-
-                16.verticalSpace(),
+                _mainButton(
+                  text: "Create Account",
+                  onTap: () {
+                    Navigator.pushReplacement(context, AppRoutes.moviesHome());
+                  },
+                ),
+                17.verticalSpace(),
 
                 /// LOGIN REDIRECT
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      "Already Have Account? ",
-                      style: AppTheme
-                          .darkTheme
-                          .textTheme
-                          .headlineMedium, //??????????
+                    const Text(
+                      "Already Have Account ? ",
+                      style: TextStyle(color: AppColors.white),
                     ),
                     GestureDetector(
                       onTap: () => Navigator.pop(context),
-                      child: Text(
+                      child: const Text(
                         "Login",
-                        style: AppTheme
-                            .darkTheme
-                            .textTheme
-                            .headlineMedium, //?????????
+                        style: TextStyle(
+                          color: AppColors.goldenYellow,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ],
                 ),
-                30.verticalSpace(),
+                18.verticalSpace(),
+
+                /// LANGUAGE SWITCH (Same as Login)
+                _languageSwitcher(),
+                20.verticalSpace(),
               ],
             ),
           ),
@@ -121,23 +149,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  /// نفس الـ Widgets المستخدمة في صفحة الـ Login لضمان تطابق التصميم
+  /// INPUT FIELD (Customized to match Login Style)
   Widget _inputField({
     required String hint,
     required IconData icon,
     bool isPassword = false,
+    bool obscure = false,
     Widget? suffix,
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.darkBlack, // AppColors.lightBlack
+        color: const Color(0xFF212121), // لون رمادي غامق جداً مثل الصورة
         borderRadius: BorderRadius.circular(16),
       ),
       child: TextField(
         obscureText: isPassword ? obscure : false,
+        style: const TextStyle(color: AppColors.white),
         decoration: InputDecoration(
           hintText: hint,
-          hintStyle: AppTheme.darkTheme.inputDecorationTheme.hintStyle,
+          hintStyle: const TextStyle(color: AppColors.white, fontSize: 14),
           prefixIcon: Icon(icon, color: AppColors.white),
           suffixIcon: suffix,
           border: InputBorder.none,
@@ -147,30 +177,41 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Widget _mainButton({
-    required String text,
-    Widget? icon,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: 56,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: AppColors.goldenYellow, // goldenYellow
-          borderRadius: BorderRadius.circular(15),
+  /// MAIN BUTTON
+  Widget _mainButton({required String text, required VoidCallback onTap}) {
+    return ElevatedButton(
+      onPressed: onTap,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.goldenYellow,
+        minimumSize: const Size(double.infinity, 56),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      ),
+      child: Text(
+        text,
+        style: const TextStyle(
+          color: AppColors.black, // النص بلون غامق على الزر الأصفر
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (icon != null) ...[icon, const SizedBox(width: 12)],
-            Text(
-              text,
-              style: AppTheme.darkTheme.textTheme.headlineMedium, //?????????
-            ),
-          ],
-        ),
+      ),
+    );
+  }
+
+  /// LANGUAGE SWITCHER WIDGET
+  Widget _languageSwitcher() {
+    return Container(
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(30),
+        border: Border.all(color: AppColors.goldenYellow),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Image.asset(AppAssets.usaFlag, width: 30),
+          const SizedBox(width: 10),
+          Image.asset(AppAssets.egyptFlag, width: 30),
+        ],
       ),
     );
   }

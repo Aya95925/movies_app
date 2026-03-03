@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movies/ui/utils/app_assets.dart';
 import 'package:movies/ui/utils/app_colors.dart';
 import 'package:movies/ui/utils/app_routes.dart';
 import 'package:movies/ui/utils/app_theme.dart';
@@ -24,12 +25,12 @@ class _MovieOnboardingState extends State<MovieOnboarding> {
 
   // صور التدرج (Gradient) للصفحات
   final List<String> gradientImages = [
-    "assets/images/on_2.png",
-    "assets/images/on_2.png",
-    "assets/images/on_3.png",
-    "assets/images/on_4.png",
-    "assets/images/on_5.png",
-    "assets/images/on_6.png",
+    AppAssets.on2,
+    AppAssets.on2,
+    AppAssets.on3,
+    AppAssets.on4,
+    AppAssets.on5,
+    AppAssets.on6,
   ];
 
   final List<Map<String, String>> onboardingData = [
@@ -37,40 +38,40 @@ class _MovieOnboardingState extends State<MovieOnboarding> {
       "title": "Find Your Next\nFavorite Movie Here",
       "subtitle":
           "Get access to a huge library of movies to suit all tastes. You will surely like it.",
-      "image": "assets/images/movies_posters.png",
+      "image": AppAssets.moviesPosters,
       "mainButton": "Explore Now",
     },
     {
       "title": "Discover Movies",
       "subtitle":
           "Explore a vast collection of movies in all qualities and genres. Find your next favorite film with ease.",
-      "image": "assets/images/onpo1.png",
+      "image": AppAssets.onpo1,
       "mainButton": "Next",
     },
     {
       "title": "Explore All Genres",
       "subtitle":
           "Discover movies from every genre, in all available qualities. Find something new and exciting to watch every day.",
-      "image": "assets/images/onpo2.png",
+      "image": AppAssets.onpo2,
       "mainButton": "Next",
     },
     {
       "title": "Create Watchlists",
       "subtitle":
           "Save movies to your watchlist to keep track of what you want to watch next. Enjoy films in various qualities and genres.",
-      "image": "assets/images/onpo3.png",
+      "image": AppAssets.onpo3,
       "mainButton": "Next",
     },
     {
       "title": "Rate, Review, and Learn",
       "subtitle":
           "Share your thoughts on the movies you've watched. Dive deep into film details and help others discover great movies with your reviews.",
-      "image": "assets/images/onpo4.png",
+      "image": AppAssets.onpo4,
       "mainButton": "Next",
     },
     {
       "title": "Start Watching Now",
-      "image": "assets/images/onpo5.png",
+      "image": AppAssets.onpo5,
       "mainButton": "Finish",
     },
   ];
@@ -88,15 +89,21 @@ class _MovieOnboardingState extends State<MovieOnboarding> {
             itemCount: onboardingData.length,
             itemBuilder: (context, index) => Image.asset(
               onboardingData[index]['image']!,
-              fit: BoxFit.cover,
+              // fit: BoxFit.fill,
               width: double.infinity,
               height: double.infinity,
+              alignment: AlignmentGeometry.topCenter, // لضبط الصورة من الأعلى
             ),
           ),
 
           // 2. تدرج فوق الصورة للصفحات الأخرى (باستثناء الصفحة الأولى)
           if (currentIndex != 0)
-            Positioned.fill(
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              // التدرج يغطي فقط مساحة الصورة العلوية
+              bottom: MediaQuery.of(context).size.height * 0.30,
               child: Image.asset(
                 gradientImages[currentIndex],
                 fit: BoxFit.cover,
@@ -117,27 +124,41 @@ class _MovieOnboardingState extends State<MovieOnboarding> {
   Widget _buildFirstPage() {
     return Container(
       width: double.infinity,
+      // زدنا الارتفاع هنا لضمان أن التدرج يغطي مساحة كافية خلف النصوص
+      height: MediaQuery.of(context).size.height * 0.6,
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [Colors.transparent, AppColors.black],
+          // التدرج يبدأ شفافاً، ثم رمادي شفاف، ثم أسود كثيف
+          colors: [
+            Colors.transparent,
+            AppColors.black.withOpacity(0.2),
+            AppColors.black.withOpacity(0.8),
+            AppColors.black, // أسود تماماً في القاع
+          ],
+          stops: const [0.0, 0.3, 0.7, 1.0], // تحديد أماكن توزيع الألوان
         ),
       ),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.end, // جعل المحتوى يبدأ من الأسفل
         children: [
           Text(
             onboardingData[0]['title']!,
             textAlign: TextAlign.center,
-            style: AppTheme.darkTheme.textTheme.displayLarge,
+            style: AppTheme.darkTheme.textTheme.displayLarge?.copyWith(
+              fontSize: 36, // تكبير الخط ليتناسب مع الصورة
+              fontWeight: FontWeight.bold,
+            ),
           ),
           16.verticalSpace(),
           Text(
             onboardingData[0]['subtitle']!,
             textAlign: TextAlign.center,
-            style: AppTheme.darkTheme.textTheme.titleSmall,
+            style: AppTheme.darkTheme.textTheme.titleSmall?.copyWith(
+              color: Colors.grey[400], // جعل اللون باهت قليلاً مثل الصورة
+            ),
           ),
           32.verticalSpace(),
           _buildButton(
@@ -151,7 +172,7 @@ class _MovieOnboardingState extends State<MovieOnboarding> {
               );
             },
           ),
-          const SizedBox(height: 30),
+          const SizedBox(height: 40), // مسافة إضافية من الأسفل
         ],
       ),
     );
@@ -213,7 +234,7 @@ class _MovieOnboardingState extends State<MovieOnboarding> {
                   curve: Curves.easeInOut,
                 );
               } else {
-                Navigator.pushReplacementNamed(context, AppRoutes.login);
+                Navigator.pushReplacement(context, AppRoutes.login());
               }
             },
           ),
