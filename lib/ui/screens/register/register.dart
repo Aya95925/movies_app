@@ -3,6 +3,7 @@ import 'package:movies/ui/utils/app_assets.dart';
 import 'package:movies/ui/utils/app_colors.dart';
 import 'package:movies/ui/utils/app_routes.dart';
 import 'package:movies/ui/utils/extension/int_extensions.dart';
+import 'package:movies/ui/widgets/language_switch.dart';
 import 'package:movies/ui/widgets/main_button.dart';
 import 'package:movies/ui/widgets/text_field.dart';
 
@@ -45,7 +46,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 /// AVATAR SELECTION SECTION
                 Center(
                   child: Image.asset(
-                    AppAssets.avatar, // تأكد من اسم الملف الصحيح
+                    AppAssets.avatar,
                     height: 100,
                     fit: BoxFit.contain,
                   ),
@@ -122,31 +123,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 18.verticalSpace(),
 
                 /// LANGUAGE SWITCH (Same as Login)
-                _languageSwitcher(),
+                const LanguageSwitcherWidget(),
                 20.verticalSpace(),
               ],
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  /// LANGUAGE SWITCHER WIDGET
-  Widget _languageSwitcher() {
-    return Container(
-      padding: const EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(30),
-        border: Border.all(color: AppColors.goldenYellow),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Image.asset(AppAssets.usaFlag, width: 30),
-          const SizedBox(width: 10),
-          Image.asset(AppAssets.egyptFlag, width: 30),
-        ],
       ),
     );
   }

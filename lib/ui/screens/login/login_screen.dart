@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:movies/ui/utils/app_assets.dart';
 import 'package:movies/ui/utils/app_colors.dart';
 import 'package:movies/ui/utils/app_routes.dart';
+import 'package:movies/ui/utils/app_theme.dart';
 import 'package:movies/ui/utils/extension/int_extensions.dart';
+import 'package:movies/ui/widgets/language_switch.dart';
 import 'package:movies/ui/widgets/main_button.dart';
 import 'package:movies/ui/widgets/text_field.dart';
 
@@ -58,11 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                     child: Text(
                       "Forget Password ?",
-                      style: TextStyle(
-                        fontFamily: "Roboto",
-                        color: AppColors.goldenYellow,
-                        fontSize: 13,
-                      ),
+                      style: AppTheme.darkTheme.textTheme.labelMedium,
                     ),
                   ),
                 ),
@@ -143,31 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 30.verticalSpace(),
 
                 /// LANGUAGE SWITCH
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 4,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColors.black,
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(color: AppColors.goldenYellow),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      CircleAvatar(
-                        radius: 15,
-                        backgroundImage: AssetImage(AppAssets.usaFlag),
-                      ),
-                      const SizedBox(width: 8),
-                      CircleAvatar(
-                        radius: 15,
-                        backgroundImage: AssetImage(AppAssets.egyptFlag),
-                      ),
-                    ],
-                  ),
-                ),
+                const LanguageSwitcherWidget(),
               ],
             ),
           ),

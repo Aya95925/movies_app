@@ -8,6 +8,7 @@ abstract final class AppAssets {
   // Auth & Profile
   static const String forgotPassword = 'assets/images/forgot_password.png';
   static const String avatar = 'assets/images/avataer.png';
+  static const String avatarProfile = 'assets/images/profile_avataer.png';
   static const String profileAvatar = 'assets/images/profile_avataer.png';
 
   // Onboarding Backgrounds
@@ -30,4 +31,13 @@ abstract final class AppAssets {
   static const String usaFlag = 'assets/images/usa.png';
   static const String onP2Jpg = 'assets/images/onP2.jpg';
   static const String onP6 = 'assets/images/onP6.png';
+
+  // Navigation Icons
+  static const String homeIcon = 'assets/icons/home.png';
+  static const String searchIcon = 'assets/icons/search.png';
+  static const String browseIcon = 'assets/icons/browse.png';
+  static const String profileIcon = 'assets/icons/profile.png';
+
+  // Movie Posters (for MoviesHome screen)
+  static const String searchEmptyState = 'assets/images/search_empty.png';
 }

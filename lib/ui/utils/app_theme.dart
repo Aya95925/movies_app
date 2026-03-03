@@ -51,7 +51,6 @@ abstract final class AppTheme {
       ),
       bodySmall: TextStyle(
         fontSize: 16,
-        fontWeight: FontWeight.w400,
         fontFamily: "Roboto",
         color: AppColors.white,
       ),
@@ -64,7 +63,7 @@ abstract final class AppTheme {
       labelMedium: TextStyle(
         fontSize: 13,
         color: AppColors.goldenYellow,
-        fontFamily: "Inter",
+        fontFamily: "Roboto",
       ),
     ),
 
