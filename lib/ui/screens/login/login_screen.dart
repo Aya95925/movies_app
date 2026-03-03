@@ -26,18 +26,18 @@ class _LoginScreenState extends State<LoginScreen> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                const SizedBox(height: 30),
+                30.verticalSpace(),
 
                 /// LOGO
                 Image.asset(AppAssets.logo, width: 121, height: 118),
                 30.verticalSpace(),
 
-                SizedBox(height: 30),
+                30.verticalSpace(),
 
                 /// EMAIL
                 CustomTextField(hint: "Email", prefixIcon: Icons.email_sharp),
 
-                const SizedBox(height: 16),
+                16.verticalSpace(),
 
                 /// PASSWORD
                 CustomTextField(
@@ -47,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   initialObscure: obscure,
                 ),
 
-                const SizedBox(height: 10),
+                10.verticalSpace(),
 
                 /// FORGET PASSWORD
                 Align(
@@ -67,12 +67,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
 
-                const SizedBox(height: 24),
+                24.verticalSpace(),
 
                 /// LOGIN BUTTON
                 CustomMainButton(text: "Login", onTap: () {}),
 
-                const SizedBox(height: 16),
+                16.verticalSpace(),
 
                 /// CREATE ACCOUNT
                 Row(
@@ -101,7 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
 
-                const SizedBox(height: 24),
+                24.verticalSpace(),
 
                 /// OR
                 Row(
@@ -131,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
 
-                const SizedBox(height: 24),
+                24.verticalSpace(),
 
                 /// GOOGLE LOGIN
                 CustomMainButton(
@@ -140,7 +140,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   onTap: () {},
                 ),
 
-                const SizedBox(height: 30),
+                30.verticalSpace(),
 
                 /// LANGUAGE SWITCH
                 Container(

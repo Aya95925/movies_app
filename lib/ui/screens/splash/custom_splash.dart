@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:movies/ui/utils/app_assets.dart';
 import 'package:movies/ui/utils/app_routes.dart';
 
 class CustomSplashScreen extends StatefulWidget {
@@ -31,13 +32,7 @@ class _CustomSplashScreenState extends State<CustomSplashScreen> {
       body: Stack(
         children: [
           // اللوجو في المنتصف
-          Center(
-            child: Image.asset(
-              'assets/images/main_logo.png',
-              width: 253,
-              height: 253,
-            ),
-          ),
+          Center(child: Image.asset(AppAssets.logo, width: 253, height: 253)),
           // الجزء السفلي
           Positioned(
             bottom: 40,
@@ -45,11 +40,7 @@ class _CustomSplashScreenState extends State<CustomSplashScreen> {
             right: 0,
             child: Column(
               children: [
-                Image.asset(
-                  'assets/images/min_logo_route.png',
-                  height: 76,
-                  width: 180,
-                ),
+                Image.asset(AppAssets.routeLogo, height: 76, width: 180),
                 SizedBox(height: 10),
                 Text(
                   "Supervised by Mohamed Nabil",

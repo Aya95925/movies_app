@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:movies/ui/utils/app_assets.dart';
 import 'package:movies/ui/utils/app_colors.dart';
 import 'package:movies/ui/utils/app_routes.dart';
+import 'package:movies/ui/utils/app_theme.dart';
 import 'package:movies/ui/utils/extension/int_extensions.dart';
 
 class MovieOnboarding extends StatefulWidget {
@@ -128,8 +129,8 @@ class _MovieOnboardingState extends State<MovieOnboarding> {
           end: Alignment.bottomCenter,
           colors: [
             Colors.transparent,
-            AppColors.black.withOpacity(0.2),
-            AppColors.black.withOpacity(0.8),
+            AppColors.black.withValues(alpha: 0.2),
+            AppColors.black.withValues(alpha: 0.8),
             AppColors.black,
           ],
           stops: const [0.0, 0.3, 0.7, 1.0],
@@ -141,13 +142,7 @@ class _MovieOnboardingState extends State<MovieOnboarding> {
           Text(
             onboardingData[0]['title']!,
             textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: AppColors.white,
-              fontSize: 36,
-              fontWeight: FontWeight.w500,
-              fontFamily: "Inter",
-              height: 1.2,
-            ),
+            style: AppTheme.darkTheme.textTheme.displayLarge,
           ),
           30.verticalSpace(),
           _buildButton(
@@ -185,23 +180,14 @@ class _MovieOnboardingState extends State<MovieOnboarding> {
           Text(
             onboardingData[currentIndex]['title']!,
             textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: AppColors.white,
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-            ),
+            style: AppTheme.darkTheme.textTheme.titleLarge,
           ),
           if (onboardingData[currentIndex].containsKey('subtitle')) ...[
             16.verticalSpace(),
             Text(
               onboardingData[currentIndex]['subtitle']!,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: AppColors.white,
-                fontSize: 18,
-                height: 1.3,
-                fontFamily: "Inter",
-              ),
+              style: AppTheme.darkTheme.textTheme.bodyLarge,
             ),
           ],
           24.verticalSpace(),
