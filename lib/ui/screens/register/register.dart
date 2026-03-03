@@ -3,6 +3,8 @@ import 'package:movies/ui/utils/app_assets.dart';
 import 'package:movies/ui/utils/app_colors.dart';
 import 'package:movies/ui/utils/app_routes.dart';
 import 'package:movies/ui/utils/extension/int_extensions.dart';
+import 'package:movies/ui/widgets/main_button.dart';
+import 'package:movies/ui/widgets/text_field.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -59,56 +61,37 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 12.verticalSpace(),
 
                 /// NAME FIELD
-                _inputField(hint: "Name", icon: Icons.badge_outlined),
+                CustomTextField(hint: "Name", prefixIcon: Icons.badge_outlined),
                 16.verticalSpace(),
 
                 /// EMAIL FIELD
-                _inputField(hint: "Email", icon: Icons.email),
+                CustomTextField(hint: "Email", prefixIcon: Icons.email),
                 16.verticalSpace(),
 
                 /// PASSWORD FIELD
-                _inputField(
+                CustomTextField(
                   hint: "Password",
-                  icon: Icons.lock,
+                  prefixIcon: Icons.lock,
                   isPassword: true,
-                  obscure: obscurePassword,
-                  suffix: IconButton(
-                    icon: Icon(
-                      obscurePassword ? Icons.visibility_off : Icons.visibility,
-                      color: AppColors.white,
-                    ),
-                    onPressed: () =>
-                        setState(() => obscurePassword = !obscurePassword),
-                  ),
+                  initialObscure: obscurePassword,
                 ),
                 16.verticalSpace(),
 
                 /// CONFIRM PASSWORD FIELD
-                _inputField(
+                CustomTextField(
                   hint: "Confirm Password",
-                  icon: Icons.lock,
+                  prefixIcon: Icons.lock,
                   isPassword: true,
-                  obscure: obscureConfirmPassword,
-                  suffix: IconButton(
-                    icon: Icon(
-                      obscureConfirmPassword
-                          ? Icons.visibility_off
-                          : Icons.visibility,
-                      color: AppColors.white,
-                    ),
-                    onPressed: () => setState(
-                      () => obscureConfirmPassword = !obscureConfirmPassword,
-                    ),
-                  ),
+                  initialObscure: obscureConfirmPassword,
                 ),
                 16.verticalSpace(),
 
                 /// PHONE NUMBER FIELD
-                _inputField(hint: "Phone Number", icon: Icons.phone),
-                16.verticalSpace(),
+                CustomTextField(hint: "Phone Number", prefixIcon: Icons.phone),
+                25.verticalSpace(),
 
                 /// CREATE ACCOUNT BUTTON
-                _mainButton(
+                CustomMainButton(
                   text: "Create Account",
                   onTap: () {
                     Navigator.pushReplacement(context, AppRoutes.moviesHome());
@@ -144,54 +127,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-
-  /// INPUT FIELD (Customized to match Login Style)
-  Widget _inputField({
-    required String hint,
-    required IconData icon,
-    bool isPassword = false,
-    bool obscure = false,
-    Widget? suffix,
-  }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: const Color(0xFF212121), // لون رمادي غامق جداً مثل الصورة
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: TextField(
-        obscureText: isPassword ? obscure : false,
-        style: const TextStyle(color: AppColors.white),
-        decoration: InputDecoration(
-          hintText: hint,
-          hintStyle: const TextStyle(color: AppColors.white, fontSize: 14),
-          prefixIcon: Icon(icon, color: AppColors.white),
-          suffixIcon: suffix,
-          border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(vertical: 18),
-        ),
-      ),
-    );
-  }
-
-  /// MAIN BUTTON
-  Widget _mainButton({required String text, required VoidCallback onTap}) {
-    return ElevatedButton(
-      onPressed: onTap,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.goldenYellow,
-        minimumSize: const Size(double.infinity, 56),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      ),
-      child: Text(
-        text,
-        style: const TextStyle(
-          color: AppColors.black, // النص بلون غامق على الزر الأصفر
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
         ),
       ),
     );

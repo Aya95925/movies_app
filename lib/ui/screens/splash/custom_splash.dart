@@ -33,7 +33,7 @@ class _CustomSplashScreenState extends State<CustomSplashScreen> {
           // اللوجو في المنتصف
           Center(
             child: Image.asset(
-              'assets/images/logo.png',
+              'assets/images/main_logo.png',
               width: 253,
               height: 253,
             ),
@@ -46,7 +46,7 @@ class _CustomSplashScreenState extends State<CustomSplashScreen> {
             child: Column(
               children: [
                 Image.asset(
-                  'assets/images/route_logo.png',
+                  'assets/images/min_logo_route.png',
                   height: 76,
                   width: 180,
                 ),

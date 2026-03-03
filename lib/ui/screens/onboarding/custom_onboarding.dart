@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:movies/ui/utils/app_assets.dart';
 import 'package:movies/ui/utils/app_colors.dart';
 import 'package:movies/ui/utils/app_routes.dart';
-import 'package:movies/ui/utils/app_theme.dart';
-import 'package:movies/ui/utils/extension/context_extension.dart';
 import 'package:movies/ui/utils/extension/int_extensions.dart';
 
 class MovieOnboarding extends StatefulWidget {
@@ -23,7 +21,6 @@ class _MovieOnboardingState extends State<MovieOnboarding> {
     super.dispose();
   }
 
-  // صور التدرج (Gradient) للصفحات
   final List<String> gradientImages = [
     AppAssets.on2,
     AppAssets.on2,
@@ -82,27 +79,26 @@ class _MovieOnboardingState extends State<MovieOnboarding> {
       backgroundColor: AppColors.black,
       body: Stack(
         children: [
-          // 1. صور الخلفية والـ PageView (الطبقة السفلية)
+          /// 1. الخلفية (الصور)
           PageView.builder(
             controller: _controller,
             onPageChanged: (index) => setState(() => currentIndex = index),
             itemCount: onboardingData.length,
             itemBuilder: (context, index) => Image.asset(
               onboardingData[index]['image']!,
-              // fit: BoxFit.fill,
               width: double.infinity,
               height: double.infinity,
-              alignment: AlignmentGeometry.topCenter, // لضبط الصورة من الأعلى
+              fit: BoxFit.fill,
+              alignment: Alignment.topCenter,
             ),
           ),
 
-          // 2. تدرج فوق الصورة للصفحات الأخرى (باستثناء الصفحة الأولى)
+          /// 2. تدرج فوق الصورة للصفحات الأخرى (باستثناء الصفحة الأولى)
           if (currentIndex != 0)
             Positioned(
               top: 0,
               left: 0,
               right: 0,
-              // التدرج يغطي فقط مساحة الصورة العلوية
               bottom: MediaQuery.of(context).size.height * 0.30,
               child: Image.asset(
                 gradientImages[currentIndex],
@@ -110,7 +106,7 @@ class _MovieOnboardingState extends State<MovieOnboarding> {
               ),
             ),
 
-          // 3. المحتوى السفلي (الطبقة العلوية)
+          /// 3. المحتوى السفلي
           Align(
             alignment: Alignment.bottomCenter,
             child: currentIndex == 0 ? _buildFirstPage() : _buildOtherPages(),
@@ -120,47 +116,40 @@ class _MovieOnboardingState extends State<MovieOnboarding> {
     );
   }
 
-  // ================= PAGE 1 IN ONBOARDING =================
+  // ================= PAGE 1 =================
   Widget _buildFirstPage() {
     return Container(
       width: double.infinity,
-      // زدنا الارتفاع هنا لضمان أن التدرج يغطي مساحة كافية خلف النصوص
       height: MediaQuery.of(context).size.height * 0.6,
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          // التدرج يبدأ شفافاً، ثم رمادي شفاف، ثم أسود كثيف
           colors: [
             Colors.transparent,
             AppColors.black.withOpacity(0.2),
             AppColors.black.withOpacity(0.8),
-            AppColors.black, // أسود تماماً في القاع
+            AppColors.black,
           ],
-          stops: const [0.0, 0.3, 0.7, 1.0], // تحديد أماكن توزيع الألوان
+          stops: const [0.0, 0.3, 0.7, 1.0],
         ),
       ),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.end, // جعل المحتوى يبدأ من الأسفل
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Text(
             onboardingData[0]['title']!,
             textAlign: TextAlign.center,
-            style: AppTheme.darkTheme.textTheme.displayLarge?.copyWith(
-              fontSize: 36, // تكبير الخط ليتناسب مع الصورة
-              fontWeight: FontWeight.bold,
+            style: const TextStyle(
+              color: AppColors.white,
+              fontSize: 36,
+              fontWeight: FontWeight.w500,
+              fontFamily: "Inter",
+              height: 1.2,
             ),
           ),
-          16.verticalSpace(),
-          Text(
-            onboardingData[0]['subtitle']!,
-            textAlign: TextAlign.center,
-            style: AppTheme.darkTheme.textTheme.titleSmall?.copyWith(
-              color: Colors.grey[400], // جعل اللون باهت قليلاً مثل الصورة
-            ),
-          ),
-          32.verticalSpace(),
+          30.verticalSpace(),
           _buildButton(
             text: onboardingData[0]['mainButton']!,
             color: AppColors.goldenYellow,
@@ -172,20 +161,19 @@ class _MovieOnboardingState extends State<MovieOnboarding> {
               );
             },
           ),
-          const SizedBox(height: 40), // مسافة إضافية من الأسفل
+          const SizedBox(height: 40),
         ],
       ),
     );
   }
 
-  // ================= OTHER PAGES IN ONBOARDING =================
+  // ================= OTHER PAGES =================
   Widget _buildOtherPages() {
     return Container(
       width: double.infinity,
-      // تأكد أن الـ padding لا يغطي الجزء العلوي الذي نريده دائرياً
-      padding: const EdgeInsets.fromLTRB(24, 20, 24, 30),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 30),
       decoration: const BoxDecoration(
-        color: AppColors.black, // لون صلب ليغطي الصورة
+        color: AppColors.black,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(40),
           topRight: Radius.circular(40),
@@ -194,35 +182,29 @@ class _MovieOnboardingState extends State<MovieOnboarding> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // مؤشر بسيط للصفحات (اختياري، يضيف لمسة جمالية)
-          Container(
-            width: 40,
-            height: 4,
-            decoration: BoxDecoration(
-              color: AppColors.white.withOpacity(0.3),
-              borderRadius: BorderRadius.circular(2),
-            ),
-          ),
-          16.verticalSpace(),
-
           Text(
             onboardingData[currentIndex]['title']!,
             textAlign: TextAlign.center,
-            style: context.textTheme.titleLarge?.copyWith(fontSize: 28),
+            style: const TextStyle(
+              color: AppColors.white,
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-          16.verticalSpace(),
-
           if (onboardingData[currentIndex].containsKey('subtitle')) ...[
+            16.verticalSpace(),
             Text(
               onboardingData[currentIndex]['subtitle']!,
               textAlign: TextAlign.center,
-              style: context.textTheme.bodyLarge?.copyWith(
-                color: AppColors.white.withOpacity(0.7),
+              style: const TextStyle(
+                color: AppColors.white,
+                fontSize: 18,
+                height: 1.3,
+                fontFamily: "Inter",
               ),
             ),
-            30.verticalSpace(),
           ],
-
+          24.verticalSpace(),
           _buildButton(
             text: onboardingData[currentIndex]['mainButton']!,
             color: AppColors.goldenYellow,
@@ -238,8 +220,7 @@ class _MovieOnboardingState extends State<MovieOnboarding> {
               }
             },
           ),
-
-          if (currentIndex > 1) ...[
+          if (currentIndex > 0) ...[
             15.verticalSpace(),
             _buildButton(
               text: "Back",
@@ -259,7 +240,7 @@ class _MovieOnboardingState extends State<MovieOnboarding> {
     );
   }
 
-  // ================= GENERAL BUTTON =================
+  // ================= BUTTON =================
   Widget _buildButton({
     required String text,
     required Color color,
@@ -272,7 +253,7 @@ class _MovieOnboardingState extends State<MovieOnboarding> {
       height: 56,
       child: OutlinedButton(
         style: OutlinedButton.styleFrom(
-          backgroundColor: isOutlined ? Colors.transparent : color,
+          backgroundColor: isOutlined ? AppColors.transparent : color,
           side: isOutlined
               ? const BorderSide(color: AppColors.goldenYellow)
               : BorderSide.none,
@@ -284,8 +265,8 @@ class _MovieOnboardingState extends State<MovieOnboarding> {
         child: Text(
           text,
           style: TextStyle(
-            fontSize: 18,
             color: textColor,
+            fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
         ),

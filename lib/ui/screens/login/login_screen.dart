@@ -3,6 +3,8 @@ import 'package:movies/ui/utils/app_assets.dart';
 import 'package:movies/ui/utils/app_colors.dart';
 import 'package:movies/ui/utils/app_routes.dart';
 import 'package:movies/ui/utils/extension/int_extensions.dart';
+import 'package:movies/ui/widgets/main_button.dart';
+import 'package:movies/ui/widgets/text_field.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -24,34 +26,28 @@ class _LoginScreenState extends State<LoginScreen> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                30.verticalSpace(),
+                const SizedBox(height: 30),
 
                 /// LOGO
                 Image.asset(AppAssets.logo, width: 121, height: 118),
                 30.verticalSpace(),
 
-                /// EMAIL
-                _inputField(hint: "Email", icon: Icons.email_sharp),
+                SizedBox(height: 30),
 
-                16.verticalSpace(),
+                /// EMAIL
+                CustomTextField(hint: "Email", prefixIcon: Icons.email_sharp),
+
+                const SizedBox(height: 16),
 
                 /// PASSWORD
-                _inputField(
+                CustomTextField(
                   hint: "Password",
-                  icon: Icons.lock_sharp,
+                  prefixIcon: Icons.lock_sharp,
                   isPassword: true,
-                  suffix: IconButton(
-                    icon: Icon(
-                      obscure ? Icons.visibility_off : Icons.visibility,
-                      color: AppColors.white,
-                    ),
-                    onPressed: () {
-                      setState(() => obscure = !obscure);
-                    },
-                  ),
+                  initialObscure: obscure,
                 ),
 
-                10.verticalSpace(),
+                const SizedBox(height: 10),
 
                 /// FORGET PASSWORD
                 Align(
@@ -71,12 +67,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
 
-                24.verticalSpace(),
+                const SizedBox(height: 24),
 
                 /// LOGIN BUTTON
-                _mainButton(text: "Login", onTap: () {}),
+                CustomMainButton(text: "Login", onTap: () {}),
 
-                16.verticalSpace(),
+                const SizedBox(height: 16),
 
                 /// CREATE ACCOUNT
                 Row(
@@ -105,7 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
 
-                24.verticalSpace(),
+                const SizedBox(height: 24),
 
                 /// OR
                 Row(
@@ -135,16 +131,16 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
 
-                24.verticalSpace(),
+                const SizedBox(height: 24),
 
                 /// GOOGLE LOGIN
-                _mainButton(
+                CustomMainButton(
                   text: "Login With Google",
                   icon: Image.asset(AppAssets.iconGoogle, width: 22),
                   onTap: () {},
                 ),
 
-                30.verticalSpace(),
+                const SizedBox(height: 30),
 
                 /// LANGUAGE SWITCH
                 Container(
@@ -175,69 +171,6 @@ class _LoginScreenState extends State<LoginScreen> {
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-
-  /// INPUT FIELD
-  Widget _inputField({
-    required String hint,
-    required IconData icon,
-    bool isPassword = false,
-    Widget? suffix,
-  }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.darkRed,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: TextField(
-        obscureText: isPassword ? obscure : false,
-        style: const TextStyle(color: AppColors.white, fontFamily: "Roboto"),
-        decoration: InputDecoration(
-          hintText: hint,
-          hintStyle: const TextStyle(
-            color: AppColors.white,
-            fontFamily: "Roboto",
-          ),
-          prefixIcon: Icon(icon, color: AppColors.white),
-          suffixIcon: suffix,
-          border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(vertical: 18),
-        ),
-      ),
-    );
-  }
-
-  /// MAIN BUTTON
-  Widget _mainButton({
-    required String text,
-    Widget? icon,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: 56,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: AppColors.goldenYellow,
-          borderRadius: BorderRadius.circular(15),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (icon != null) ...[icon, const SizedBox(width: 12)],
-            Text(
-              text,
-              style: const TextStyle(
-                fontSize: 16,
-                fontFamily: "Roboto",
-                color: AppColors.darkRed,
-              ),
-            ),
-          ],
         ),
       ),
     );
