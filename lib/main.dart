@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movies_app/ui/screens/home/home_tabs.dart';
 
 void main() {
   runApp(const MoviesApp());
@@ -9,6 +10,6 @@ class MoviesApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp();
+    return MaterialApp(debugShowCheckedModeBanner: false, home: HomeTabs());
   }
 }
