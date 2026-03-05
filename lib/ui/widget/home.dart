@@ -2,7 +2,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:movies_app/ui/utils/app_assets.dart';
 import 'package:movies_app/ui/utils/app_colors.dart';
+import 'package:movies_app/ui/utils/app_routes.dart';
 import 'package:movies_app/ui/utils/app_style.dart';
+import 'package:movies_app/ui/widget/custom_list_view.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -46,11 +48,16 @@ class _HomeState extends State<Home> {
                     ),
                     itemCount: 5,
                     itemBuilder: (context, index, realIndex) {
-                      return ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: Image.asset(
-                          AppAssets.groub14,
-                          fit: BoxFit.cover,
+                      return InkWell(
+                        onTap: () {
+                          Navigator.push(context, AppRoutes.movieDetails(AppAssets.groub14));
+                        },
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Image.asset(
+                            AppAssets.groub14,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       );
                     },
@@ -95,32 +102,3 @@ class _HomeState extends State<Home> {
   }
 }
 
-class CustomListView extends StatelessWidget {
-  const CustomListView({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: ListView.builder(
-        itemCount: 10,
-
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.only(right: 16),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: Image.asset(
-                AppAssets.groub13,
-                width: MediaQuery.of(context).size.width * .4,
-                height: MediaQuery.of(context).size.height * .26,
-                fit: BoxFit.cover,
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-}

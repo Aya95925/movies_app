@@ -9,4 +9,5 @@ abstract final class AppColors {
   static const red = Color(0xffE82626);
   static const darkRed = Color(0xff282A28);
   static const transparent = Colors.transparent;
+  static const gray = Color(0xffADADAD);
 }

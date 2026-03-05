@@ -12,4 +12,14 @@ abstract final class AppStyle {
     fontWeight: FontWeight.w400,
     color: AppColors.goldenYellow,
   );
+  static TextStyle white24Bold = TextStyle(
+    fontSize: 24,
+    fontWeight: FontWeight.w700,
+    color: AppColors.white,
+  );
+   static TextStyle gray20Bold = TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.w700,
+    color: AppColors.gray,
+  );
 }

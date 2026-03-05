@@ -1,5 +1,5 @@
 abstract final class AppAssets {
-  // Navigation Icons
+ 
   static const String homeIcon = 'assets/images/home.png';
   static const String searchIcon = 'assets/images/search.png';
   static const String browseIcon = 'assets/images/browse.png';
@@ -9,4 +9,9 @@ abstract final class AppAssets {
   static const String availableNow = 'assets/images/Available Now.png';
   static const String watchNow = 'assets/images/Watch Now.png';
   static const String backgroundHome = 'assets/images/background_home.png';
+  static const String vector4 = 'assets/images/Vector (4).png';
+  static const String largeScreenShot1 = 'assets/images/large-screenshot1.png';
+  static const String largeScreenShot2 = 'assets/images/large-screenshot2.png';
+  static const String largeScreenShot3 = 'assets/images/large-screenshot3.png';
+  static const String rectangle22 = 'assets/images/Rectangle 22.png';
 }
