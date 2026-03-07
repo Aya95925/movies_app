@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:movies/ui/utils/app_colors.dart';
-import 'package:movies/ui/utils/extension/int_extensions.dart';
+import 'package:flutter_application_new/ui/utils/app_colors.dart';
+import 'package:flutter_application_new/ui/utils/extension/int_extensions.dart';
 
 class BrowseTab extends StatefulWidget {
   const BrowseTab({super.key});

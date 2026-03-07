@@ -1,8 +1,12 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:movies/ui/screens/navigation/tabs/moveis/browse_screen.dart';
-import 'package:movies/ui/screens/navigation/tabs/moveis/profile_screen.dart';
-import 'package:movies/ui/screens/navigation/tabs/moveis/search_screen.dart';
-import 'package:movies/ui/utils/app_colors.dart';
+import 'package:flutter_application_new/ui/screens/navigation/tabs/moveis/browse_screen.dart';
+import 'package:flutter_application_new/ui/screens/navigation/tabs/moveis/profaile/profile_screen.dart';
+import 'package:flutter_application_new/ui/screens/navigation/tabs/moveis/search_screen.dart';
+import 'package:flutter_application_new/ui/utils/app_assets.dart';
+import 'package:flutter_application_new/ui/utils/app_colors.dart';
+import 'package:flutter_application_new/ui/utils/app_routes.dart';
+import 'package:flutter_application_new/ui/widgets/custom_list_view.dart';
 
 class MoviesHome extends StatefulWidget {
   const MoviesHome({super.key});
@@ -14,10 +18,8 @@ class MoviesHome extends StatefulWidget {
 class _MoviesHomeState extends State<MoviesHome> {
   int _selectedIndex = 0;
 
-  final List<Widget> _screens = [
-    const Center(
-      child: Text("Home Screen", style: TextStyle(color: Colors.white)),
-    ),
+  List<Widget> get _screens => [
+    _buildHomeContent(context),
     const SearchScreen(),
     const BrowseTab(),
     const ProfileTab(),
@@ -28,46 +30,119 @@ class _MoviesHomeState extends State<MoviesHome> {
     return Scaffold(
       backgroundColor: AppColors.black,
       body: _screens[_selectedIndex],
-
-      /// BOTTOM NAVIGATION BAR
       bottomNavigationBar: Container(
-        margin: const EdgeInsets.all(12), // لإعطاء تأثير الطفو كما في الصورة
+        margin: const EdgeInsets.all(12),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(16), // حواف دائرية للبار
+          borderRadius: BorderRadius.circular(16),
           child: BottomNavigationBar(
             currentIndex: _selectedIndex,
-            onTap: (index) {
-              setState(() {
-                _selectedIndex = index;
-              });
-            },
-            backgroundColor: const Color(0xFF1E1E1E), // لون خلفية البار الداكن
+            onTap: (index) => setState(() => _selectedIndex = index),
+            backgroundColor: const Color(0xFF1E1E1E),
             type: BottomNavigationBarType.fixed,
-            showSelectedLabels: false,
-            showUnselectedLabels: false,
             selectedItemColor: AppColors.goldenYellow,
             unselectedItemColor: AppColors.white,
             items: const [
               BottomNavigationBarItem(
                 icon: Icon(Icons.home, size: 28),
-                label: "Home",
+                label: "",
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.search, size: 28),
-                label: "Search",
+                label: "",
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.explore, size: 28), // أيقونة التصفح
-                label: "Browse",
+                icon: Icon(Icons.explore, size: 28),
+                label: "",
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.person_sharp, size: 28),
-                label: "Profile",
+                label: "",
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildHomeContent(BuildContext context) {
+    // استخدمنا LayoutBuilder لفهم أبعاد الشاشة المتوفرة
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+              // جعلنا الارتفاع ديناميكي ليناسب الشاشات المختلفة
+              Container(
+                height: constraints.maxHeight * 0.6,
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(AppAssets.backgroundHome),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(AppAssets.availableNow, height: 40),
+                    const SizedBox(height: 10),
+                    CarouselSlider.builder(
+                      options: CarouselOptions(
+                        height: 250, // تقليل الارتفاع قليلاً لمنع التداخل
+                        viewportFraction: 0.6,
+                        enlargeCenterPage: true,
+                      ),
+                      itemCount: 5,
+                      itemBuilder: (context, index, realIndex) {
+                        return InkWell(
+                          onTap: () => Navigator.push(
+                            context,
+                            AppRoutes.movieDetails(AppAssets.groub14),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Image.asset(
+                              AppAssets.groub14,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    Image.asset(AppAssets.watchNow, height: 40),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Actions',
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                    Text(
+                      'seeMore',
+                      style: TextStyle(
+                        color: AppColors.goldenYellow,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // نستخدم SizedBox بارتفاع مناسب بدلاً من نسبة كبيرة جداً
+              SizedBox(height: 180, child: const CustomListView()),
+              const SizedBox(height: 20),
+            ],
+          ),
+        );
+      },
     );
   }
 }

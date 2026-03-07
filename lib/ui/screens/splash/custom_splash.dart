@@ -1,15 +1,15 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_new/ui/utils/app_assets.dart';
 import 'dart:async';
 
-import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:movies/ui/utils/app_assets.dart';
-import 'package:movies/ui/utils/app_routes.dart';
+import 'package:flutter_application_new/ui/utils/app_routes.dart';
 
 class CustomSplashScreen extends StatefulWidget {
   const CustomSplashScreen({super.key});
 
   @override
-  _CustomSplashScreenState createState() => _CustomSplashScreenState();
+  State<CustomSplashScreen> createState() => _CustomSplashScreenState();
 }
 
 class _CustomSplashScreenState extends State<CustomSplashScreen> {
@@ -17,11 +17,18 @@ class _CustomSplashScreenState extends State<CustomSplashScreen> {
   void initState() {
     super.initState();
 
-    FlutterNativeSplash.remove();
-
     // الانتقال للأونبوردينج بعد 3 ثواني
-    Timer(Duration(seconds: 3), () {
-      Navigator.pushReplacement(context, AppRoutes.onboarding());
+    Timer(const Duration(seconds: 3), () {
+      // فحص حالة المستخدم الحالية
+      final user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        // إذا كان مسجل دخول، اذهب للرئيسية مباشرة
+        Navigator.pushReplacement(context, AppRoutes.moviesHome());
+      } else {
+        // إذا لم يكن مسجل، اذهب للأونبوردينج
+        Navigator.pushReplacement(context, AppRoutes.onboarding());
+      }
     });
   }
 

@@ -1,4 +1,4 @@
-# movies
+# flutter_application_new
 
 A new Flutter project.
 

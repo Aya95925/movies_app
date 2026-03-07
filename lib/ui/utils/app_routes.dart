@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:movies/ui/screens/forgetpassword/forget_password.dart';
-import 'package:movies/ui/screens/login/login_screen.dart';
-import 'package:movies/ui/screens/navigation/tabs/moveis/movies_home.dart';
-import 'package:movies/ui/screens/onboarding/custom_onboarding.dart';
-import 'package:movies/ui/screens/register/register.dart';
-import 'package:movies/ui/screens/splash/custom_splash.dart';
+import 'package:flutter_application_new/ui/screens/forgetpassword/forget_password.dart';
+import 'package:flutter_application_new/ui/screens/login/login_screen.dart';
+import 'package:flutter_application_new/ui/screens/navigation/tabs/moveis/movies_details/movie_details.dart';
+import 'package:flutter_application_new/ui/screens/navigation/tabs/moveis/movies_home.dart';
+import 'package:flutter_application_new/ui/screens/navigation/tabs/moveis/profaile/update_profaile.dart';
+import 'package:flutter_application_new/ui/screens/onboarding/custom_onboarding.dart';
+import 'package:flutter_application_new/ui/screens/register/register.dart';
+import 'package:flutter_application_new/ui/screens/splash/custom_splash.dart';
 
 abstract final class AppRoutes {
   static Route splash() =>
@@ -24,6 +26,12 @@ abstract final class AppRoutes {
 
   static Route forgetPassword() =>
       MaterialPageRoute(builder: (_) => const ForgetPasswordScreen());
+
+  static Route updateScreen() =>
+      MaterialPageRoute(builder: (_) => const UpdateProfaile());
+
+  static Route movieDetails(String image) =>
+      MaterialPageRoute(builder: (_) => MoviesDetails(image: image));
 
   /// ويدجيت افتراضية في حال حدوث خطأ في التوجيه
   static Route unDefinedRoute() => MaterialPageRoute(

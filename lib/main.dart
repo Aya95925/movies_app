@@ -1,29 +1,33 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:movies/ui/screens/splash/custom_splash.dart';
+import 'package:flutter_application_new/ui/screens/splash/custom_splash.dart';
 
-void main() {
-  // وظيفته تجهيز محرك فلاتر والاتصال بنظام التشغيل قبل بدء التطبيق.
-  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  // وظيفته تجميد شاشة  (Splash) ومنعها من الاختفاء تلقائياً.
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
+  runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      // initialRoute: "/",
       home: const CustomSplashScreen(),
 
       // onGenerateRoute: (settings) {
       //   switch (settings.name) {
       //     case "/":
-      //       return AppRoutes.splash();
+      //       return AppRoutes.splash3
+      // 6();
       //     case "/onboarding":
       //       return AppRoutes.onboarding();
       //     case "/moviesHome":

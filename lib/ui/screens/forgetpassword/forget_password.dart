@@ -1,12 +1,21 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:movies/ui/utils/app_assets.dart';
-import 'package:movies/ui/utils/app_colors.dart';
-import 'package:movies/ui/utils/extension/int_extensions.dart';
-import 'package:movies/ui/widgets/main_button.dart';
-import 'package:movies/ui/widgets/text_field.dart';
+import 'package:flutter_application_new/ui/utils/app_assets.dart';
+import 'package:flutter_application_new/ui/utils/app_colors.dart';
+import 'package:flutter_application_new/ui/utils/extension/int_extensions.dart';
+import 'package:flutter_application_new/ui/widgets/main_button.dart';
+import 'package:flutter_application_new/ui/widgets/text_field.dart';
 
-class ForgetPasswordScreen extends StatelessWidget {
+class ForgetPasswordScreen extends StatefulWidget {
   const ForgetPasswordScreen({super.key});
+
+  @override
+  State<ForgetPasswordScreen> createState() => _ForgetPasswordScreenState();
+}
+
+class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
+  final TextEditingController emailController = TextEditingController();
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -42,11 +51,53 @@ class ForgetPasswordScreen extends StatelessWidget {
                 ),
                 20.verticalSpace(),
 
-                CustomTextField(hint: "Email", prefixIcon: Icons.email),
+                CustomTextField(
+                  hint: "Email",
+                  prefixIcon: Icons.email,
+                  controller: emailController,
+                ),
                 24.verticalSpace(),
 
                 /// VERIFY BUTTON
-                CustomMainButton(text: "Verify Email", onTap: () {}),
+                CustomMainButton(
+                  text: "Verify Email",
+                  isLoading: isLoading,
+                  onTap: () async {
+                    if (emailController.text.isEmpty) {
+                      // أظهر رسالة خطأ إذا كان الحقل فارغاً
+                      return;
+                    }
+
+                    setState(() => isLoading = true);
+
+                    try {
+                      await FirebaseAuth.instance.sendPasswordResetEmail(
+                        email: emailController.text.trim(),
+                      );
+
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              "إذا كان هذا البريد مسجلاً لدينا، فستصلك رسالة قريباً.",
+                            ),
+                          ),
+                        );
+                      }
+                    } on FirebaseAuthException catch (e) {
+                      String message = "حدث خطأ: ${e.message}";
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(
+                          context,
+                        ).showSnackBar(SnackBar(content: Text(message)));
+                      }
+                    } finally {
+                      if (context.mounted) {
+                        setState(() => isLoading = false);
+                      }
+                    }
+                  },
+                ),
               ],
             ),
           ),

@@ -1,12 +1,14 @@
+import 'package:flutter_application_new/ui/utils/app_assets.dart';
+import 'package:flutter_application_new/ui/utils/app_colors.dart';
+import 'package:flutter_application_new/ui/utils/app_routes.dart';
+import 'package:flutter_application_new/ui/utils/app_theme.dart';
+import 'package:flutter_application_new/ui/utils/extension/int_extensions.dart';
+import 'package:flutter_application_new/ui/widgets/language_switch.dart';
+import 'package:flutter_application_new/ui/widgets/main_button.dart';
+import 'package:flutter_application_new/ui/widgets/text_field.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:movies/ui/utils/app_assets.dart';
-import 'package:movies/ui/utils/app_colors.dart';
-import 'package:movies/ui/utils/app_routes.dart';
-import 'package:movies/ui/utils/app_theme.dart';
-import 'package:movies/ui/utils/extension/int_extensions.dart';
-import 'package:movies/ui/widgets/language_switch.dart';
-import 'package:movies/ui/widgets/main_button.dart';
-import 'package:movies/ui/widgets/text_field.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -16,7 +18,32 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  bool obscure = true;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  bool isLoading = false; // متغير حالة التحميل
+
+  Future signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    // Once signed in, return the UserCredential
+    await FirebaseAuth.instance.signInWithCredential(credential);
+    Navigator.pushAndRemoveUntil(
+      context,
+      AppRoutes.moviesHome(),
+      (route) => false,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,24 +56,24 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               children: [
                 30.verticalSpace(),
-
-                /// LOGO
                 Image.asset(AppAssets.logo, width: 121, height: 118),
-                30.verticalSpace(),
+                60.verticalSpace(),
 
-                30.verticalSpace(),
-
-                /// EMAIL
-                CustomTextField(hint: "Email", prefixIcon: Icons.email_sharp),
+                /// EMAIL FIELD
+                CustomTextField(
+                  controller: _emailController,
+                  hint: "Email",
+                  prefixIcon: Icons.email_sharp,
+                ),
 
                 16.verticalSpace(),
 
-                /// PASSWORD
+                /// PASSWORD FIELD
                 CustomTextField(
+                  controller: _passwordController,
                   hint: "Password",
                   prefixIcon: Icons.lock_sharp,
                   isPassword: true,
-                  initialObscure: obscure,
                 ),
 
                 10.verticalSpace(),
@@ -55,9 +82,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 Align(
                   alignment: Alignment.centerRight,
                   child: InkWell(
-                    onTap: () {
-                      Navigator.push(context, AppRoutes.forgetPassword());
-                    },
+                    onTap: () =>
+                        Navigator.push(context, AppRoutes.forgetPassword()),
                     child: Text(
                       "Forget Password ?",
                       style: AppTheme.darkTheme.textTheme.labelMedium,
@@ -68,11 +94,62 @@ class _LoginScreenState extends State<LoginScreen> {
                 24.verticalSpace(),
 
                 /// LOGIN BUTTON
-                CustomMainButton(text: "Login", onTap: () {}),
+                CustomMainButton(
+                  text: "Login",
+                  isLoading: isLoading, // ربط المتغير بالزر
+                  onTap: () async {
+                    // 1. تحقق بسيط من الحقول
+                    if (_emailController.text.isEmpty ||
+                        _passwordController.text.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("يرجى ملء جميع الحقول")),
+                      );
+                      return;
+                    }
+
+                    setState(() => isLoading = true); // بدء التحميل
+
+                    try {
+                      await FirebaseAuth.instance.signInWithEmailAndPassword(
+                        email: _emailController.text.trim(),
+                        password: _passwordController.text.trim(),
+                      );
+
+                      if (context.mounted) {
+                        Navigator.pushReplacement(
+                          context,
+                          AppRoutes.moviesHome(),
+                        );
+                      }
+                    } on FirebaseAuthException catch (e) {
+                      // 2. معالجة الأخطاء وإظهار رسائل واضحة للمستخدم
+                      String message = "حدث خطأ أثناء تسجيل الدخول";
+                      if (e.code == 'user-not-found') {
+                        message = "لا يوجد حساب بهذا البريد الإلكتروني.";
+                      } else if (e.code == 'wrong-password') {
+                        message = "كلمة المرور غير صحيحة.";
+                      } else if (e.code == 'invalid-email') {
+                        message = "صيغة البريد الإلكتروني غير صحيحة.";
+                      }
+
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(
+                          context,
+                        ).showSnackBar(SnackBar(content: Text(message)));
+                      }
+                    } catch (e) {
+                      print("Error: $e");
+                    } finally {
+                      if (context.mounted) {
+                        setState(() => isLoading = false); // إيقاف التحميل
+                      }
+                    }
+                  },
+                ),
 
                 16.verticalSpace(),
 
-                /// CREATE ACCOUNT
+                /// CREATE ACCOUNT ROW
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -84,9 +161,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     InkWell(
-                      onTap: () {
-                        Navigator.push(context, AppRoutes.register());
-                      },
+                      onTap: () =>
+                          Navigator.push(context, AppRoutes.register()),
                       child: Text(
                         "Create One",
                         style: TextStyle(
@@ -101,29 +177,23 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 24.verticalSpace(),
 
-                /// OR
+                /// DIVIDER "OR"
                 Row(
                   children: [
                     Expanded(
-                      child: Divider(
-                        color: AppColors.goldenYellow,
-                        indent: 38.0,
-                      ),
+                      child: Divider(color: AppColors.goldenYellow, indent: 38),
                     ),
                     const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 8),
                       child: Text(
                         "OR",
-                        style: TextStyle(
-                          fontFamily: "Roboto",
-                          color: AppColors.goldenYellow,
-                        ),
+                        style: TextStyle(color: AppColors.goldenYellow),
                       ),
                     ),
                     Expanded(
                       child: Divider(
                         color: AppColors.goldenYellow,
-                        endIndent: 38.0,
+                        endIndent: 38,
                       ),
                     ),
                   ],
@@ -131,16 +201,17 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 24.verticalSpace(),
 
-                /// GOOGLE LOGIN
+                /// GOOGLE LOGIN BUTTON
                 CustomMainButton(
                   text: "Login With Google",
+                  backgroundColor: AppColors.goldenYellow,
                   icon: Image.asset(AppAssets.iconGoogle, width: 22),
-                  onTap: () {},
+                  onTap: () {
+                    signInWithGoogle();
+                  },
                 ),
 
                 30.verticalSpace(),
-
-                /// LANGUAGE SWITCH
                 const LanguageSwitcherWidget(),
               ],
             ),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:movies/ui/utils/app_assets.dart';
-import 'package:movies/ui/utils/app_colors.dart';
-import 'package:movies/ui/utils/app_routes.dart';
-import 'package:movies/ui/utils/app_theme.dart';
-import 'package:movies/ui/utils/extension/int_extensions.dart';
+import 'package:flutter_application_new/ui/utils/app_assets.dart';
+import 'package:flutter_application_new/ui/utils/app_colors.dart';
+import 'package:flutter_application_new/ui/utils/app_routes.dart';
+import 'package:flutter_application_new/ui/utils/app_theme.dart';
+import 'package:flutter_application_new/ui/utils/extension/int_extensions.dart';
 
 class MovieOnboarding extends StatefulWidget {
   const MovieOnboarding({super.key});
@@ -206,7 +206,7 @@ class _MovieOnboardingState extends State<MovieOnboarding> {
               }
             },
           ),
-          if (currentIndex > 0) ...[
+          if (currentIndex > 1) ...[
             15.verticalSpace(),
             _buildButton(
               text: "Back",

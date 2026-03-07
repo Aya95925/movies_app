@@ -40,4 +40,26 @@ abstract final class AppAssets {
 
   // Movie Posters (for MoviesHome screen)
   static const String searchEmptyState = 'assets/images/search_empty.png';
+
+  //Movie avatar image
+  static const String avatar1 = 'assets/images/avatar1.png';
+  static const String avatar2 = 'assets/images/avatar2.png';
+  static const String avatar3 = 'assets/images/avatar3.png';
+  static const String avatar4 = 'assets/images/avatar4.png';
+  static const String avatar5 = 'assets/images/avatar5.png';
+  static const String avatar6 = 'assets/images/avatar6.png';
+  static const String avatar7 = 'assets/images/avatar7.png';
+  static const String avatar8 = 'assets/images/avatar8.png';
+  static const String avatar9 = 'assets/images/avatar9.png';
+
+  static const String groub13 = 'assets/images/Group 13.png';
+  static const String groub14 = 'assets/images/Group 14.png';
+  static const String availableNow = 'assets/images/Available Now.png';
+  static const String watchNow = 'assets/images/Watch Now.png';
+  static const String backgroundHome = 'assets/images/background_home.png';
+  static const String vector4 = 'assets/images/vector4.png';
+  static const String largeScreenShot1 = 'assets/images/large-screenshot1.png';
+  static const String largeScreenShot2 = 'assets/images/large-screenshot2.png';
+  static const String largeScreenShot3 = 'assets/images/large-screenshot3.png';
+  static const String rectangle22 = 'assets/images/Rectangle 22.png';
 }

@@ -1,11 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:movies/ui/utils/app_assets.dart';
-import 'package:movies/ui/utils/app_colors.dart';
-import 'package:movies/ui/utils/app_routes.dart';
-import 'package:movies/ui/utils/extension/int_extensions.dart';
-import 'package:movies/ui/widgets/language_switch.dart';
-import 'package:movies/ui/widgets/main_button.dart';
-import 'package:movies/ui/widgets/text_field.dart';
+import 'package:flutter_application_new/ui/utils/app_assets.dart';
+import 'package:flutter_application_new/ui/utils/app_colors.dart';
+import 'package:flutter_application_new/ui/utils/app_routes.dart';
+import 'package:flutter_application_new/ui/utils/extension/int_extensions.dart';
+import 'package:flutter_application_new/ui/widgets/language_switch.dart';
+import 'package:flutter_application_new/ui/widgets/main_button.dart';
+import 'package:flutter_application_new/ui/widgets/text_field.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -15,6 +16,12 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  bool _isLoading = false;
+
   bool obscurePassword = true;
   bool obscureConfirmPassword = true;
 
@@ -45,10 +52,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                 /// AVATAR SELECTION SECTION
                 Center(
-                  child: Image.asset(
-                    AppAssets.avatar,
-                    height: 100,
-                    fit: BoxFit.contain,
+                  child: ClipOval(
+                    child: Image.asset(
+                      AppAssets.avatar,
+                      height: 100,
+                      width: 100,
+                      fit: BoxFit.cover,
+                      // حماية ضد فقدان ملف الصورة
+                      errorBuilder: (context, error, stackTrace) => const Icon(
+                        Icons.account_circle,
+                        size: 100,
+                        color: AppColors.white,
+                      ),
+                    ),
                   ),
                 ),
                 const Text(
@@ -62,15 +78,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 12.verticalSpace(),
 
                 /// NAME FIELD
-                CustomTextField(hint: "Name", prefixIcon: Icons.badge_outlined),
+                CustomTextField(
+                  controller: _nameController,
+                  hint: "Name",
+                  prefixIcon: Icons.badge_outlined,
+                ),
                 16.verticalSpace(),
 
                 /// EMAIL FIELD
-                CustomTextField(hint: "Email", prefixIcon: Icons.email),
+                CustomTextField(
+                  controller: _emailController,
+                  hint: "Email",
+                  prefixIcon: Icons.email,
+                ),
                 16.verticalSpace(),
 
                 /// PASSWORD FIELD
                 CustomTextField(
+                  controller: _passwordController,
                   hint: "Password",
                   prefixIcon: Icons.lock,
                   isPassword: true,
@@ -88,14 +113,37 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 16.verticalSpace(),
 
                 /// PHONE NUMBER FIELD
-                CustomTextField(hint: "Phone Number", prefixIcon: Icons.phone),
+                CustomTextField(
+                  controller: _phoneController,
+                  hint: "Phone Number",
+                  prefixIcon: Icons.phone,
+                ),
                 25.verticalSpace(),
 
                 /// CREATE ACCOUNT BUTTON
                 CustomMainButton(
                   text: "Create Account",
-                  onTap: () {
-                    Navigator.pushReplacement(context, AppRoutes.moviesHome());
+                  isLoading: _isLoading,
+                  onTap: () async {
+                    try {
+                      final credential = await FirebaseAuth.instance
+                          .createUserWithEmailAndPassword(
+                            email: _emailController.text,
+                            password: _passwordController.text,
+                          );
+                      Navigator.pushReplacement(
+                        context,
+                        AppRoutes.moviesHome(),
+                      );
+                    } on FirebaseAuthException catch (e) {
+                      if (e.code == 'weak-password') {
+                        print('The password provided is too weak.');
+                      } else if (e.code == 'email-already-in-use') {
+                        print('The account already exists for that email.');
+                      }
+                    } catch (e) {
+                      print(e);
+                    }
                   },
                 ),
                 17.verticalSpace(),
