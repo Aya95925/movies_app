@@ -30,7 +30,6 @@ class MovieHeader extends StatelessWidget {
                   color: AppColors.white,
                   onPressed: () => Navigator.pop(context),
                 ),
-                // إضافة Expanded هنا سيمنع الـ Row من تجاوز العرض
                 Expanded(
                   child: Align(
                     alignment: Alignment.centerRight,
@@ -41,11 +40,11 @@ class MovieHeader extends StatelessWidget {
             ),
           ),
 
-          const Spacer(), // يملأ المساحة الفارغة ديناميكياً
+          const Spacer(),
 
           const Center(child: CustomMoviesVideo()),
 
-          const Spacer(), // يملأ المساحة الفارغة ديناميكياً
+          const Spacer(),
 
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),

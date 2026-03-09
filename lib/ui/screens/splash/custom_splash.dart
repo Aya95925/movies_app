@@ -38,9 +38,7 @@ class _CustomSplashScreenState extends State<CustomSplashScreen> {
       backgroundColor: Colors.black,
       body: Stack(
         children: [
-          // اللوجو في المنتصف
           Center(child: Image.asset(AppAssets.logo, width: 253, height: 253)),
-          // الجزء السفلي
           Positioned(
             bottom: 40,
             left: 0,

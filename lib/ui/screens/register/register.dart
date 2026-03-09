@@ -19,11 +19,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
-  bool _isLoading = false;
 
-  bool obscurePassword = true;
-  bool obscureConfirmPassword = true;
+  bool _isLoading = false; // متغير حالة التحميل
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _phoneController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,19 +62,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                 /// AVATAR SELECTION SECTION
                 Center(
-                  child: ClipOval(
-                    child: Image.asset(
-                      AppAssets.avatar,
-                      height: 100,
-                      width: 100,
-                      fit: BoxFit.cover,
-                      // حماية ضد فقدان ملف الصورة
-                      errorBuilder: (context, error, stackTrace) => const Icon(
-                        Icons.account_circle,
-                        size: 100,
-                        color: AppColors.white,
-                      ),
-                    ),
+                  child: Image.asset(
+                    AppAssets.avatar9,
+                    height: 130,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
                   ),
                 ),
                 const Text(
@@ -99,16 +101,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   hint: "Password",
                   prefixIcon: Icons.lock,
                   isPassword: true,
-                  initialObscure: obscurePassword,
                 ),
                 16.verticalSpace(),
 
                 /// CONFIRM PASSWORD FIELD
                 CustomTextField(
+                  controller: _confirmPasswordController,
                   hint: "Confirm Password",
                   prefixIcon: Icons.lock,
                   isPassword: true,
-                  initialObscure: obscureConfirmPassword,
                 ),
                 16.verticalSpace(),
 
@@ -123,26 +124,61 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 /// CREATE ACCOUNT BUTTON
                 CustomMainButton(
                   text: "Create Account",
-                  isLoading: _isLoading,
+                  isLoading: _isLoading, // ربط حالة التحميل بالزر
                   onTap: () async {
+                    if (_nameController.text.isEmpty ||
+                        _emailController.text.isEmpty ||
+                        _passwordController.text.isEmpty ||
+                        _confirmPasswordController.text.isEmpty ||
+                        _phoneController.text.isEmpty) {
+                      _showSnackBar("يرجى ملء جميع الحقول");
+                      return;
+                    }
+
+                    // 2. التحقق من تطابق كلمة المرور
+                    if (_passwordController.text !=
+                        _confirmPasswordController.text) {
+                      _showSnackBar("كلمات المرور غير متطابقة");
+                      return;
+                    }
+
+                    // 3. التحقق من طول كلمة المرور
+                    if (_passwordController.text.length < 6) {
+                      _showSnackBar("كلمة المرور يجب أن تكون 6 أحرف على الأقل");
+                      return;
+                    }
+
+                    setState(() => _isLoading = true); // بدء التحميل
+
                     try {
-                      final credential = await FirebaseAuth.instance
+                      await FirebaseAuth.instance
                           .createUserWithEmailAndPassword(
-                            email: _emailController.text,
-                            password: _passwordController.text,
+                            email: _emailController.text.trim(),
+                            password: _passwordController.text.trim(),
                           );
-                      Navigator.pushReplacement(
-                        context,
-                        AppRoutes.moviesHome(),
-                      );
-                    } on FirebaseAuthException catch (e) {
-                      if (e.code == 'weak-password') {
-                        print('The password provided is too weak.');
-                      } else if (e.code == 'email-already-in-use') {
-                        print('The account already exists for that email.');
+
+                      if (mounted) {
+                        Navigator.pushReplacement(
+                          context,
+                          AppRoutes.moviesHome(),
+                        );
                       }
+                    } on FirebaseAuthException catch (e) {
+                      String message = "حدث خطأ أثناء إنشاء الحساب";
+                      if (e.code == 'weak-password') {
+                        message = "كلمة المرور ضعيفة جداً.";
+                      } else if (e.code == 'email-already-in-use') {
+                        message = "هذا البريد الإلكتروني مستخدم بالفعل.";
+                      } else if (e.code == 'invalid-email') {
+                        message = "صيغة البريد الإلكتروني غير صحيحة.";
+                      }
+                      _showSnackBar(message);
                     } catch (e) {
-                      print(e);
+                      _showSnackBar("خطأ غير متوقع: $e");
+                    } finally {
+                      if (mounted) {
+                        setState(() => _isLoading = false); // إيقاف التحميل
+                      }
                     }
                   },
                 ),
@@ -170,7 +206,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 18.verticalSpace(),
 
-                /// LANGUAGE SWITCH (Same as Login)
+                /// LANGUAGE SWITCH
                 const LanguageSwitcherWidget(),
                 20.verticalSpace(),
               ],
@@ -179,5 +215,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       ),
     );
+  }
+
+  void _showSnackBar(String message) {
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message, style: const TextStyle(fontFamily: "Roboto")),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
+    }
   }
 }

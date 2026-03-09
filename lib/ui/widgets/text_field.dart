@@ -5,8 +5,8 @@ class CustomTextField extends StatefulWidget {
   final IconData prefixIcon;
   final IconData? suffixIcon;
   final String? hint;
-  final bool isPassword; // هل هو حقل كلمة مرور (يظهر أيقونة العين)
-  final bool initialObscure; // التحكم في حالة التشفير الأولية
+  final bool isPassword;
+  final bool initialObscure;
   final TextEditingController? controller;
 
   const CustomTextField({
@@ -15,7 +15,7 @@ class CustomTextField extends StatefulWidget {
     this.suffixIcon,
     this.hint,
     this.isPassword = false,
-    this.initialObscure = false, // اختيارية، والقيمة الافتراضية غير مشفر
+    this.initialObscure = false,
     this.controller,
   });
 
@@ -29,7 +29,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   void initState() {
     super.initState();
-    // إذا كان حقل كلمة مرور، يبدأ مشفراً تلقائياً، وإلا يأخذ القيمة الممررة
     obscure = widget.isPassword ? true : widget.initialObscure;
   }
 
@@ -42,7 +41,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
       ),
       child: TextField(
         controller: widget.controller,
-        // يستخدم الحالة المحلية obscure التي نتحكم بها
         obscureText: obscure,
         style: const TextStyle(color: AppColors.white, fontFamily: "Roboto"),
         decoration: InputDecoration(
@@ -53,7 +51,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
           ),
           prefixIcon: Icon(widget.prefixIcon, color: AppColors.white),
 
-          // منطق أيقونة الـ Suffix
           suffixIcon: widget.isPassword
               ? IconButton(
                   icon: Icon(

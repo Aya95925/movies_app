@@ -22,13 +22,13 @@ class _MovieOnboardingState extends State<MovieOnboarding> {
     super.dispose();
   }
 
-  final List<String> gradientImages = [
-    AppAssets.on2,
-    AppAssets.on2,
-    AppAssets.on3,
-    AppAssets.on4,
-    AppAssets.on5,
-    AppAssets.on6,
+  final List<Color> pageGradientColors = [
+    Colors.black, // الصفحة 1
+    const Color(0xFF003D4C), // الصفحة 2:
+    const Color(0xFF6C2314), // الصفحة 3:
+    const Color(0xFF4C2A6B), // الصفحة 4:
+    const Color(0xFF5E2129), // الصفحة 5:
+    const Color(0xFF2D3238), // الصفحة 6:
   ];
 
   final List<Map<String, String>> onboardingData = [
@@ -61,7 +61,7 @@ class _MovieOnboardingState extends State<MovieOnboarding> {
       "mainButton": "Next",
     },
     {
-      "title": "Rate, Review, and Learn",
+      "title": "Rate, Review and Learn",
       "subtitle":
           "Share your thoughts on the movies you've watched. Dive deep into film details and help others discover great movies with your reviews.",
       "image": AppAssets.onpo4,
@@ -80,7 +80,6 @@ class _MovieOnboardingState extends State<MovieOnboarding> {
       backgroundColor: AppColors.black,
       body: Stack(
         children: [
-          /// 1. الخلفية (الصور)
           PageView.builder(
             controller: _controller,
             onPageChanged: (index) => setState(() => currentIndex = index),
@@ -89,23 +88,39 @@ class _MovieOnboardingState extends State<MovieOnboarding> {
               onboardingData[index]['image']!,
               width: double.infinity,
               height: double.infinity,
-              fit: BoxFit.fill,
+              fit: BoxFit.contain,
               alignment: Alignment.topCenter,
             ),
           ),
 
-          /// 2. تدرج فوق الصورة للصفحات الأخرى (باستثناء الصفحة الأولى)
-          if (currentIndex != 0)
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: MediaQuery.of(context).size.height * 0.30,
-              child: Image.asset(
-                gradientImages[currentIndex],
-                fit: BoxFit.cover,
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 600),
+            width: double.infinity,
+            height: double.infinity,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: currentIndex == 0
+                    ? [
+                        const Color(0xFF1E1E1E).withOpacity(0.0),
+                        const Color(0xFF1E1E1E).withOpacity(0.2),
+                        const Color(0xFF121312).withOpacity(0.5),
+                        const Color(0xFF121312).withOpacity(0.91),
+                        const Color(0xFF121312),
+                      ]
+                    : [
+                        Colors.transparent,
+                        pageGradientColors[currentIndex].withOpacity(0.6),
+                        pageGradientColors[currentIndex].withOpacity(0.8),
+                        AppColors.black,
+                      ],
+                stops: currentIndex == 0
+                    ? const [0.0, 0.2, 0.5, 0.8, 1.0]
+                    : const [0.0, 0.3, 0.6, 0.8],
               ),
             ),
+          ),
 
           /// 3. المحتوى السفلي
           Align(
@@ -121,30 +136,29 @@ class _MovieOnboardingState extends State<MovieOnboarding> {
   Widget _buildFirstPage() {
     return Container(
       width: double.infinity,
-      height: MediaQuery.of(context).size.height * 0.6,
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Colors.transparent,
-            AppColors.black.withValues(alpha: 0.2),
-            AppColors.black.withValues(alpha: 0.8),
-            AppColors.black,
-          ],
-          stops: const [0.0, 0.3, 0.7, 1.0],
-        ),
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Text(
             onboardingData[0]['title']!,
             textAlign: TextAlign.center,
-            style: AppTheme.darkTheme.textTheme.displayLarge,
+            style: AppTheme.darkTheme.textTheme.displayLarge?.copyWith(
+              fontSize: 36,
+              fontWeight: FontWeight.w500,
+            ),
           ),
-          30.verticalSpace(),
+          const SizedBox(height: 16),
+          Text(
+            onboardingData[0]['subtitle']!,
+            textAlign: TextAlign.center,
+            style: AppTheme.darkTheme.textTheme.bodyLarge?.copyWith(
+              color: Colors.white70,
+              fontSize: 20,
+            ),
+          ),
+
+          const SizedBox(height: 24),
           _buildButton(
             text: onboardingData[0]['mainButton']!,
             color: AppColors.goldenYellow,
@@ -156,7 +170,7 @@ class _MovieOnboardingState extends State<MovieOnboarding> {
               );
             },
           ),
-          const SizedBox(height: 40),
+          const SizedBox(height: 15),
         ],
       ),
     );
@@ -166,7 +180,7 @@ class _MovieOnboardingState extends State<MovieOnboarding> {
   Widget _buildOtherPages() {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 30),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
       decoration: const BoxDecoration(
         color: AppColors.black,
         borderRadius: BorderRadius.only(
@@ -183,14 +197,14 @@ class _MovieOnboardingState extends State<MovieOnboarding> {
             style: AppTheme.darkTheme.textTheme.titleLarge,
           ),
           if (onboardingData[currentIndex].containsKey('subtitle')) ...[
-            16.verticalSpace(),
+            19.verticalSpace(),
             Text(
               onboardingData[currentIndex]['subtitle']!,
               textAlign: TextAlign.center,
               style: AppTheme.darkTheme.textTheme.bodyLarge,
             ),
           ],
-          24.verticalSpace(),
+          17.verticalSpace(),
           _buildButton(
             text: onboardingData[currentIndex]['mainButton']!,
             color: AppColors.goldenYellow,
@@ -236,10 +250,10 @@ class _MovieOnboardingState extends State<MovieOnboarding> {
   }) {
     return SizedBox(
       width: double.infinity,
-      height: 56,
+      height: 50,
       child: OutlinedButton(
         style: OutlinedButton.styleFrom(
-          backgroundColor: isOutlined ? AppColors.transparent : color,
+          backgroundColor: isOutlined ? Colors.transparent : color,
           side: isOutlined
               ? const BorderSide(color: AppColors.goldenYellow)
               : BorderSide.none,

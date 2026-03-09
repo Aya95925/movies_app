@@ -29,20 +29,6 @@ class SearchScreen extends StatelessWidget {
                   prefixIcon: Icons.search,
                   hint: "Search",
                 ),
-                // TextField(
-                //   style: TextStyle(color: AppColors.white, fontSize: 18),
-                //   decoration: InputDecoration(
-                //     hintText: "Search",
-                //     hintStyle: TextStyle(color: AppColors.white, fontSize: 18),
-                //     prefixIcon: Icon(
-                //       Icons.search,
-                //       color: AppColors.white,
-                //       size: 28,
-                //     ),
-                //     border: InputBorder.none,
-                //     contentPadding: EdgeInsets.symmetric(vertical: 12),
-                //   ),
-                // ),
               ),
 
               /// EMPTY STATE IMAGE

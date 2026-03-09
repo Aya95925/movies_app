@@ -6,6 +6,7 @@ import 'package:flutter_application_new/ui/screens/navigation/tabs/moveis/search
 import 'package:flutter_application_new/ui/utils/app_assets.dart';
 import 'package:flutter_application_new/ui/utils/app_colors.dart';
 import 'package:flutter_application_new/ui/utils/app_routes.dart';
+import 'package:flutter_application_new/ui/utils/extension/int_extensions.dart';
 import 'package:flutter_application_new/ui/widgets/custom_list_view.dart';
 
 class MoviesHome extends StatefulWidget {
@@ -72,9 +73,8 @@ class _MoviesHomeState extends State<MoviesHome> {
         return SingleChildScrollView(
           child: Column(
             children: [
-              // جعلنا الارتفاع ديناميكي ليناسب الشاشات المختلفة
               Container(
-                height: constraints.maxHeight * 0.6,
+                height: constraints.maxHeight * 0.85,
                 width: double.infinity,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
@@ -85,11 +85,12 @@ class _MoviesHomeState extends State<MoviesHome> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset(AppAssets.availableNow, height: 40),
+                    Image.asset(AppAssets.availableNow, height: 100),
                     const SizedBox(height: 10),
                     CarouselSlider.builder(
                       options: CarouselOptions(
-                        height: 250, // تقليل الارتفاع قليلاً لمنع التداخل
+                        height: 350,
+
                         viewportFraction: 0.6,
                         enlargeCenterPage: true,
                       ),
@@ -110,7 +111,7 @@ class _MoviesHomeState extends State<MoviesHome> {
                         );
                       },
                     ),
-                    Image.asset(AppAssets.watchNow, height: 40),
+                    Image.asset(AppAssets.watchNow, height: 130),
                   ],
                 ),
               ),
@@ -126,18 +127,27 @@ class _MoviesHomeState extends State<MoviesHome> {
                       'Actions',
                       style: TextStyle(color: Colors.white, fontSize: 20),
                     ),
-                    Text(
-                      'seeMore',
-                      style: TextStyle(
-                        color: AppColors.goldenYellow,
-                        fontSize: 16,
-                      ),
+                    Row(
+                      children: [
+                        Text(
+                          'See More',
+                          style: TextStyle(
+                            color: AppColors.goldenYellow,
+                            fontSize: 16,
+                          ),
+                        ),
+                        5.horizontalSpace(),
+                        Icon(
+                          size: 15,
+                          Icons.arrow_forward,
+                          color: AppColors.goldenYellow,
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ),
-              // نستخدم SizedBox بارتفاع مناسب بدلاً من نسبة كبيرة جداً
-              SizedBox(height: 180, child: const CustomListView()),
+              SizedBox(height: 220, child: const CustomListView()),
               const SizedBox(height: 20),
             ],
           ),

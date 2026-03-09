@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_new/ui/utils/app_assets.dart';
 import 'package:flutter_application_new/ui/utils/app_colors.dart';
+import 'package:flutter_application_new/ui/utils/app_routes.dart';
 import 'package:flutter_application_new/ui/utils/extension/int_extensions.dart';
 import 'package:flutter_application_new/ui/widgets/main_button.dart';
 import 'package:flutter_application_new/ui/widgets/text_field.dart';
@@ -13,8 +15,71 @@ class UpdateProfaile extends StatefulWidget {
 }
 
 class _UpdateProfaileState extends State<UpdateProfaile> {
+  //code for reset password for current user
+  void resetCurrentPassword(BuildContext context) async {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null && user.email != null) {
+      try {
+        // إرسال طلب إعادة التعيين
+        await FirebaseAuth.instance.sendPasswordResetEmail(email: user.email!);
+
+        // رسالة النجاح
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("تم إرسال رابط إعادة التعيين إلى ${user.email}"),
+            backgroundColor: Colors.green, // لون النجاح
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      } on FirebaseAuthException catch (e) {
+        // رسالة الخطأ من Firebase
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("فشل الإرسال: ${e.message}"),
+            backgroundColor: Colors.red, // لون الخطأ
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      } catch (e) {
+        // أي خطأ غير متوقع آخر
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("حدث خطأ غير متوقع، يرجى المحاولة لاحقاً"),
+            backgroundColor: Colors.orange,
+          ),
+        );
+      }
+    } else {
+      // حالة عدم وجود مستخدم مسجل
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("يجب تسجيل الدخول أولاً")));
+    }
+  }
+
+  // Code for Delete Account
+  Future<void> deleteCurrentUser() async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        await user.delete();
+        print("User account deleted successfully.");
+        Navigator.pushReplacement(context, AppRoutes.login());
+      } else {
+        print("No user is currently signed in.");
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'requires-recent-login') {
+        print("User must reauthenticate before deletion.");
+        // Trigger reauthentication flow here
+      } else {
+        print("Error deleting user: ${e.message}");
+      }
+    }
+  }
+
   String selectedAvatar = AppAssets.avatarProfile;
-  // متغير لتخزين الصورة المختارة حالياً
 
   final List<String> avatars = [
     AppAssets.avatar1,
@@ -53,7 +118,6 @@ class _UpdateProfaileState extends State<UpdateProfaile> {
             children: [
               10.verticalSpace(),
 
-              // جعل الصورة قابلة للضغط لفتح القائمة
               GestureDetector(
                 onTap: _showAvatarPicker,
                 child: CircleAvatar(
@@ -74,13 +138,18 @@ class _UpdateProfaileState extends State<UpdateProfaile> {
                 hint: "01200000000",
               ),
 
-              const Align(
+              Align(
                 alignment: Alignment.centerLeft,
                 child: TextButton(
                   onPressed: null,
-                  child: Text(
-                    "Reset Password",
-                    style: TextStyle(color: Colors.white),
+                  child: InkWell(
+                    onTap: () {
+                      resetCurrentPassword(context);
+                    },
+                    child: Text(
+                      "Reset Password",
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ),
               ),
@@ -90,7 +159,40 @@ class _UpdateProfaileState extends State<UpdateProfaile> {
               CustomMainButton(
                 backgroundColor: AppColors.red,
                 text: "Delete Account",
-                onTap: () {},
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      backgroundColor: const Color(0xFF121312),
+                      title: const Text(
+                        "Delete Account",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      content: const Text(
+                        "Are you sure you want to Delete Your Account?",
+                        style: TextStyle(color: Colors.white70),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: const Text(
+                            "Cancel",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            deleteCurrentUser();
+                          },
+                          child: const Text(
+                            "Yes",
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
               ),
               16.verticalSpace(),
               CustomMainButton(text: "Update Data", onTap: () {}),

@@ -20,7 +20,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  bool isLoading = false; // متغير حالة التحميل
+  bool isLoading = false;
 
   Future signInWithGoogle() async {
     // Trigger the authentication flow
@@ -96,9 +96,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 /// LOGIN BUTTON
                 CustomMainButton(
                   text: "Login",
-                  isLoading: isLoading, // ربط المتغير بالزر
+                  isLoading: isLoading,
                   onTap: () async {
-                    // 1. تحقق بسيط من الحقول
                     if (_emailController.text.isEmpty ||
                         _passwordController.text.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -107,7 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       return;
                     }
 
-                    setState(() => isLoading = true); // بدء التحميل
+                    setState(() => isLoading = true);
 
                     try {
                       await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -122,7 +121,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         );
                       }
                     } on FirebaseAuthException catch (e) {
-                      // 2. معالجة الأخطاء وإظهار رسائل واضحة للمستخدم
                       String message = "حدث خطأ أثناء تسجيل الدخول";
                       if (e.code == 'user-not-found') {
                         message = "لا يوجد حساب بهذا البريد الإلكتروني.";
@@ -141,7 +139,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       print("Error: $e");
                     } finally {
                       if (context.mounted) {
-                        setState(() => isLoading = false); // إيقاف التحميل
+                        setState(() => isLoading = false);
                       }
                     }
                   },
