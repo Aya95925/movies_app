@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_new/ui/screens/splash/custom_splash.dart';
+import 'package:flutter_application_new/feature/movies/ui/screens/navigation/tabs/home/movies_home.dart';
+import 'package:flutter_application_new/feature/splash/presentaion/screens/custom_splash.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,7 +22,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const CustomSplashScreen(),
+      home: const CustomSplashScreen()
 
       // onGenerateRoute: (settings) {
       //   switch (settings.name) {
