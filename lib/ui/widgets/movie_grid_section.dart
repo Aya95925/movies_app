@@ -11,7 +11,7 @@ class MovieGridSection extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
-        mainAxisSpacing: 10,
+        mainAxisSpacing: 16,
         crossAxisSpacing: 10,
 
         childAspectRatio: 0.7,

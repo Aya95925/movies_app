@@ -40,8 +40,10 @@ class _BrowseTabState extends State<BrowseTab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       backgroundColor: AppColors.black,
       body: SafeArea(
+        bottom: false,
         child: Column(
           children: [
             10.verticalSpace(),

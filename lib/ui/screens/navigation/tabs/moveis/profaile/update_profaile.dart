@@ -15,6 +15,24 @@ class UpdateProfaile extends StatefulWidget {
 }
 
 class _UpdateProfaileState extends State<UpdateProfaile> {
+  bool isLoading = false;
+
+  final TextEditingController _nameController = TextEditingController();
+
+  Future<void> _updateUserData() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null && _nameController.text.isNotEmpty) {
+      try {
+        await user.updateDisplayName(_nameController.text.trim());
+        await user.reload(); // تحديث الكائن محلياً
+
+        if (mounted) Navigator.pop(context);
+      } catch (e) {
+        print("Error: $e");
+      }
+    }
+  }
+
   //code for reset password for current user
   void resetCurrentPassword(BuildContext context) async {
     User? user = FirebaseAuth.instance.currentUser;
@@ -50,12 +68,14 @@ class _UpdateProfaileState extends State<UpdateProfaile> {
           ),
         );
       }
+      return;
     } else {
       // حالة عدم وجود مستخدم مسجل
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text("يجب تسجيل الدخول أولاً")));
     }
+    setState(() => isLoading = true);
   }
 
   // Code for Delete Account
@@ -128,7 +148,8 @@ class _UpdateProfaileState extends State<UpdateProfaile> {
               ),
 
               30.verticalSpace(),
-              const CustomTextField(
+              CustomTextField(
+                controller: _nameController,
                 prefixIcon: Icons.person,
                 hint: "John Safwat",
               ),
@@ -195,7 +216,12 @@ class _UpdateProfaileState extends State<UpdateProfaile> {
                 },
               ),
               16.verticalSpace(),
-              CustomMainButton(text: "Update Data", onTap: () {}),
+              CustomMainButton(
+                text: "Update Data",
+                onTap: () {
+                  _updateUserData();
+                },
+              ),
             ],
           ),
         ),

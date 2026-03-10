@@ -29,37 +29,45 @@ class _MoviesHomeState extends State<MoviesHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       backgroundColor: AppColors.black,
       body: _screens[_selectedIndex],
-      bottomNavigationBar: Container(
-        margin: const EdgeInsets.all(12),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(16),
-          child: BottomNavigationBar(
-            currentIndex: _selectedIndex,
-            onTap: (index) => setState(() => _selectedIndex = index),
-            backgroundColor: const Color(0xFF1E1E1E),
-            type: BottomNavigationBarType.fixed,
-            selectedItemColor: AppColors.goldenYellow,
-            unselectedItemColor: AppColors.white,
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home, size: 28),
-                label: "",
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.search, size: 28),
-                label: "",
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.explore, size: 28),
-                label: "",
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person_sharp, size: 28),
-                label: "",
-              ),
-            ],
+      bottomNavigationBar: SafeArea(
+        child: Container(
+          height: 60,
+          margin: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: BottomNavigationBar(
+              currentIndex: _selectedIndex,
+              onTap: (index) => setState(() => _selectedIndex = index),
+              backgroundColor: const Color(0xFF1E1E1E),
+              type: BottomNavigationBarType.fixed,
+              selectedItemColor: AppColors.goldenYellow,
+              showSelectedLabels: false,
+              showUnselectedLabels: false,
+              unselectedFontSize: 0,
+              selectedFontSize: 0,
+              unselectedItemColor: AppColors.white,
+              items: const [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home, size: 28),
+                  label: "",
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.search, size: 28),
+                  label: "",
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.explore, size: 28),
+                  label: "",
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.person_sharp, size: 28),
+                  label: "",
+                ),
+              ],
+            ),
           ),
         ),
       ),

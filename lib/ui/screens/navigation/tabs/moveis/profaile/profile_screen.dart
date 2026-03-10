@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_new/ui/screens/navigation/tabs/moveis/profaile/update_profaile.dart';
 import 'package:flutter_application_new/ui/utils/app_assets.dart';
 import 'package:flutter_application_new/ui/utils/app_colors.dart';
 import 'package:flutter_application_new/ui/utils/app_routes.dart';
@@ -7,23 +8,43 @@ import 'package:flutter_application_new/ui/utils/extension/int_extensions.dart';
 import 'package:flutter_application_new/ui/screens/navigation/tabs/moveis/movies_details/movie_card.dart';
 import 'package:flutter_application_new/ui/widgets/movie_grid_section.dart';
 
-class ProfileTab extends StatelessWidget {
+class ProfileTab extends StatefulWidget {
   const ProfileTab({super.key});
 
   @override
+  State<ProfileTab> createState() => _ProfileTabState();
+}
+
+class _ProfileTabState extends State<ProfileTab> {
+  @override
   Widget build(BuildContext context) {
+    final User? user = FirebaseAuth.instance.currentUser;
+
+    final String displayName = user?.displayName ?? "User";
     final List<MovieModel> movies = List.generate(
       12,
       (index) => MovieModel(image: AppAssets.groub13, rating: 7.7),
     );
 
     return Scaffold(
+      extendBody: true,
       backgroundColor: AppColors.black,
       body: SafeArea(
+        bottom: false,
         child: Column(
           children: [
-            const _HeaderSection(),
-            const _ActionButtons(),
+            _HeaderSection(userName: displayName),
+            _ActionButtons(
+              onEditProfile: () async {
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const UpdateProfaile(),
+                  ),
+                );
+                setState(() {});
+              },
+            ),
             20.verticalSpace(),
             _buildTabsSection(movies),
           ],
@@ -71,7 +92,8 @@ class ProfileTab extends StatelessWidget {
 }
 
 class _HeaderSection extends StatelessWidget {
-  const _HeaderSection();
+  final String userName; // متغير لاستقبال الاسم
+  const _HeaderSection({required this.userName});
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -82,9 +104,9 @@ class _HeaderSection extends StatelessWidget {
             children: [
               Image.asset(AppAssets.avatarProfile, width: 80),
               8.verticalSpace(),
-              const Text(
-                "John Safwat",
-                style: TextStyle(
+              Text(
+                userName, // استخدام الاسم المستلم
+                style: const TextStyle(
                   color: AppColors.white,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -126,7 +148,9 @@ class _HeaderSection extends StatelessWidget {
 }
 
 class _ActionButtons extends StatelessWidget {
-  const _ActionButtons();
+  final VoidCallback onEditProfile;
+
+  const _ActionButtons({required this.onEditProfile});
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -142,7 +166,7 @@ class _ActionButtons extends StatelessWidget {
   }
 
   Widget _editProfileBtn(BuildContext context) => ElevatedButton(
-    onPressed: () => Navigator.push(context, AppRoutes.updateScreen()),
+    onPressed: onEditProfile,
     style: ElevatedButton.styleFrom(
       padding: EdgeInsets.symmetric(vertical: 11),
       backgroundColor: AppColors.goldenYellow,

@@ -151,12 +151,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     setState(() => _isLoading = true); // بدء التحميل
 
                     try {
-                      await FirebaseAuth.instance
+                      UserCredential userCredential = await FirebaseAuth
+                          .instance
                           .createUserWithEmailAndPassword(
                             email: _emailController.text.trim(),
                             password: _passwordController.text.trim(),
                           );
 
+                      // إضافة هذا السطر لحفظ الاسم
+                      await userCredential.user?.updateDisplayName(
+                        _nameController.text.trim(),
+                      );
                       if (mounted) {
                         Navigator.pushReplacement(
                           context,
