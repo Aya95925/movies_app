@@ -18,19 +18,77 @@ class _UpdateProfaileState extends State<UpdateProfaile> {
   bool isLoading = false;
 
   final TextEditingController _nameController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData(); // الآن سيعمل هذا السطر لأن الدالة أصبحت معرفة
+  }
 
-  Future<void> _updateUserData() async {
+  Future<void> _loadUserData() async {
     User? user = FirebaseAuth.instance.currentUser;
-    if (user != null && _nameController.text.isNotEmpty) {
-      try {
-        await user.updateDisplayName(_nameController.text.trim());
-        await user.reload(); // تحديث الكائن محلياً
+    if (user != null) {
+      setState(() {
+        _nameController.text = user.displayName ?? "";
+      });
+    }
+  }
 
-        if (mounted) Navigator.pop(context);
-      } catch (e) {
-        print("Error: $e");
+  //code for Update Name The current user
+  Future<void> _updateUserData() async {
+    // 1. التحقق من الحقول
+    if (_nameController.text.isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("يرجى إدخال اسم جديد")));
+      return;
+    }
+
+    // 2. تفعيل حالة التحميل
+    setState(() => isLoading = true);
+
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        // تحديث الاسم في Firebase Auth
+        await user.updateDisplayName(_nameController.text.trim());
+
+        // هنا نقوم بتحديث رقم الهاتف في Firestore
+        // (يجب التأكد من إضافة مكتبة cloud_firestore)
+        /* await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+        'name': _nameController.text.trim(),
+        'phone': _phoneController.text.trim(),
+      }, SetOptions(merge: true));
+      */
+
+        await user.reload();
+
+        if (mounted) {
+          // إغلاق الصفحة بعد نجاح التحديث
+          Navigator.pop(context);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("تم تحديث البيانات بنجاح")),
+          );
+        }
+      }
+    } catch (e) {
+      print("Error: $e");
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("حدث خطأ أثناء التحديث: $e")));
+      }
+    } finally {
+      // 3. إيقاف حالة التحميل
+      if (mounted) {
+        setState(() => isLoading = false);
       }
     }
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
   }
 
   //code for reset password for current user
@@ -218,6 +276,7 @@ class _UpdateProfaileState extends State<UpdateProfaile> {
               16.verticalSpace(),
               CustomMainButton(
                 text: "Update Data",
+                isLoading: isLoading,
                 onTap: () {
                   _updateUserData();
                 },

@@ -84,6 +84,7 @@ class _ProfileTabState extends State<ProfileTab> {
                 ],
               ),
             ),
+            60.verticalSpace(),
           ],
         ),
       ),

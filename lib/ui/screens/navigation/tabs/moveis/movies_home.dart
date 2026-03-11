@@ -35,7 +35,7 @@ class _MoviesHomeState extends State<MoviesHome> {
       bottomNavigationBar: SafeArea(
         child: Container(
           height: 60,
-          margin: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+          margin: const EdgeInsets.fromLTRB(16, 0, 16, 10),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(16),
             child: BottomNavigationBar(
@@ -82,7 +82,7 @@ class _MoviesHomeState extends State<MoviesHome> {
           child: Column(
             children: [
               Container(
-                height: constraints.maxHeight * 0.85,
+                height: constraints.maxHeight * 0.75,
                 width: double.infinity,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
@@ -156,7 +156,7 @@ class _MoviesHomeState extends State<MoviesHome> {
                 ),
               ),
               SizedBox(height: 220, child: const CustomListView()),
-              const SizedBox(height: 20),
+              const SizedBox(height: 80),
             ],
           ),
         );
