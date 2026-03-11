@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_new/ui/screens/splash/custom_splash.dart';
+import 'package:flutter_application_new/feature/splash/presentaion/screens/custom_splash.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
