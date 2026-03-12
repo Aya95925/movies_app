@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_new/feature/auth/ui/screens/forget_password/forget_password.dart';
 import 'package:flutter_application_new/feature/auth/ui/screens/login/login_screen.dart';
-import 'package:flutter_application_new/feature/movies/ui/widgets/movie_details.dart';
+import 'package:flutter_application_new/feature/movies/ui/screens/navigation/tabs/home/movie_details/movie_details.dart';
 import 'package:flutter_application_new/feature/movies/ui/screens/navigation/tabs/home/movies_home.dart';
 import 'package:flutter_application_new/feature/movies/ui/widgets/update_profaile.dart';
 import 'package:flutter_application_new/feature/auth/ui/screens/onboarding/custom_onboarding.dart';

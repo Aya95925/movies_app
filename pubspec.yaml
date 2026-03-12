@@ -33,6 +33,7 @@ dependencies:
   connectivity_plus: ^7.0.0
   cupertino_icons: ^1.0.8
   dio: ^5.9.2
+  equatable: ^2.0.8
   firebase_auth: ^6.2.0
   firebase_core: ^4.5.0
   firebase_messaging: ^16.1.2
