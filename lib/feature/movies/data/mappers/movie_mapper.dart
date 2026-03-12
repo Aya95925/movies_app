@@ -1,6 +1,7 @@
 import 'package:flutter_application_new/feature/movies/domain/model/movie.dart';
 import 'package:flutter_application_new/feature/network/models/response/movies/remote_movies.dart';
-
+import 'package:injectable/injectable.dart';
+@injectable
 class MovieMapper {
   Movie toMovie(RemoteMovies remoteMovies) {
     return Movie(
