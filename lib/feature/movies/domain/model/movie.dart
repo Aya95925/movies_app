@@ -9,6 +9,7 @@ class Movie {
   final String? image;
   final List<String>? genres;
   final String? summary;
+  final String? backgroundImage;
 
   const Movie({
     required this.id,
@@ -17,7 +18,7 @@ class Movie {
     required this.rating,
     required this.image,
     required this.genres,
-    required this.summary,
+    required this.summary, this.backgroundImage,
   });
 
   factory Movie.fromRemote(RemoteMovies remote) {
@@ -29,6 +30,7 @@ class Movie {
       image: remote.mediumCoverImage,
       genres: remote.genres,
       summary: remote.summary,
+      backgroundImage: remote.backgroundImage
     );
   }
 }

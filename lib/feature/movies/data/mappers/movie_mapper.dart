@@ -9,7 +9,8 @@ class MovieMapper {
       title: remoteMovies.title ,
       year: remoteMovies.year,
       rating: remoteMovies.rating,
-      image: remoteMovies.backgroundImage,
+      backgroundImage: remoteMovies.backgroundImage,
+      image: remoteMovies.mediumCoverImage,
       genres: remoteMovies.genres,
       summary: remoteMovies.summary,
     );
