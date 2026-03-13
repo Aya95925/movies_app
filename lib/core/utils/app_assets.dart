@@ -33,10 +33,10 @@ abstract final class AppAssets {
   static const String onP6 = 'assets/images/onP6.png';
 
   // Navigation Icons
-  static const String homeIcon = 'assets/icons/home.png';
-  static const String searchIcon = 'assets/icons/search.png';
-  static const String browseIcon = 'assets/icons/browse.png';
-  static const String profileIcon = 'assets/icons/profile.png';
+  static const String homeIcon = 'assets/images/home.png';
+  static const String searchIcon = 'assets/images/search.png';
+  static const String browseIcon = 'assets/images/browse.png';
+  static const String profileIcon = 'assets/images/profiel.png';
 
   // Movie Posters (for MoviesHome screen)
   static const String searchEmptyState = 'assets/images/search_empty.png';

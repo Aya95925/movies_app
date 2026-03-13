@@ -1,9 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_new/feature/movies/ui/screens/navigation/tabs/home/movies_home.dart';
+import 'package:flutter_application_new/core/di/di.dart';
 import 'package:flutter_application_new/feature/splash/presentaion/screens/custom_splash.dart';
 
 void main() async {
+  initDependcies();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 

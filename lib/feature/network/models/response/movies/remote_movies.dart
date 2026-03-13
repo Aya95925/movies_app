@@ -1,5 +1,4 @@
-// import 'package:equatable/equatable.dart';
-
+// RemoteMovies.dart
 import 'remote_torrent.dart';
 
 class RemoteMovies {
@@ -60,62 +59,64 @@ class RemoteMovies {
   });
 
   factory RemoteMovies.fromJson(Map<String, dynamic> json) => RemoteMovies(
-    id: json['id'] as String?,
-    url: json['url'] as String?,
-    imdbCode: json['imdb_code'] as String?,
-    title: json['title'] as String?,
-    titleEnglish: json['title_english'] as String?,
-    titleLong: json['title_long'] as String?,
-    slug: json['slug'] as String?,
-    year: json['year'] as int?,
-    rating: (json['rating'] as num?)?.toDouble(),
-    runtime: json['runtime'] as int?,
-    genres: json['genres'] as List<String>?,
-    summary: json['summary'] as String?,
-    descriptionFull: json['description_full'] as String?,
-    synopsis: json['synopsis'] as String?,
-    ytTrailerCode: json['yt_trailer_code'] as String?,
-    language: json['language'] as String?,
-    mpaRating: json['mpa_rating'] as String?,
-    backgroundImage: json['background_image'] as String?,
-    backgroundImageOriginal: json['background_image_original'] as String?,
-    smallCoverImage: json['small_cover_image'] as String?,
-    mediumCoverImage: json['medium_cover_image'] as String?,
-    largeCoverImage: json['large_cover_image'] as String?,
-    state: json['state'] as String?,
-    torrents: (json['torrents'] as List<dynamic>?)
-        ?.map((e) => RemoteTorrent.fromJson(e as Map<String, dynamic>))
-        .toList(),
-    dateUploaded: json['date_uploaded'] as String?,
-    dateUploadedUnix: json['date_uploaded_unix'] as int?,
-  );
+        id: json['id']?.toString(), // تحويل int أو String لأي id
+        url: json['url']?.toString(),
+        imdbCode: json['imdb_code']?.toString(),
+        title: json['title']?.toString(),
+        titleEnglish: json['title_english']?.toString(),
+        titleLong: json['title_long']?.toString(),
+        slug: json['slug']?.toString(),
+        year: (json['year'] is int) ? json['year'] as int : int.tryParse(json['year']?.toString() ?? ''),
+        rating: (json['rating'] as num?)?.toDouble(),
+        runtime: (json['runtime'] is int) ? json['runtime'] as int : int.tryParse(json['runtime']?.toString() ?? ''),
+        genres: (json['genres'] as List<dynamic>?)?.map((e) => e.toString()).toList(),
+        summary: json['summary']?.toString(),
+        descriptionFull: json['description_full']?.toString(),
+        synopsis: json['synopsis']?.toString(),
+        ytTrailerCode: json['yt_trailer_code']?.toString(),
+        language: json['language']?.toString(),
+        mpaRating: json['mpa_rating']?.toString(),
+        backgroundImage: json['background_image']?.toString(),
+        backgroundImageOriginal: json['background_image_original']?.toString(),
+        smallCoverImage: json['small_cover_image']?.toString(),
+        mediumCoverImage: json['medium_cover_image']?.toString(),
+        largeCoverImage: json['large_cover_image']?.toString(),
+        state: json['state']?.toString(),
+        torrents: (json['torrents'] as List<dynamic>?)
+            ?.map((e) => RemoteTorrent.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        dateUploaded: json['date_uploaded']?.toString(),
+        dateUploadedUnix: (json['date_uploaded_unix'] is int)
+            ? json['date_uploaded_unix'] as int
+            : int.tryParse(json['date_uploaded_unix']?.toString() ?? ''),
+      );
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'url': url,
-    'imdb_code': imdbCode,
-    'title': title,
-    'title_english': titleEnglish,
-    'title_long': titleLong,
-    'slug': slug,
-    'year': year,
-    'rating': rating,
-    'runtime': runtime,
-    'genres': genres,
-    'summary': summary,
-    'description_full': descriptionFull,
-    'synopsis': synopsis,
-    'yt_trailer_code': ytTrailerCode,
-    'language': language,
-    'mpa_rating': mpaRating,
-    'background_image': backgroundImage,
-    'background_image_original': backgroundImageOriginal,
-    'small_cover_image': smallCoverImage,
-    'medium_cover_image': mediumCoverImage,
-    'large_cover_image': largeCoverImage,
-    'state': state,
-    'torrents': torrents?.map((e) => e.toJson()).toList(),
-    'date_uploaded': dateUploaded,
-    'date_uploaded_unix': dateUploadedUnix,
-  };
+        'id': id,
+        'url': url,
+        'imdb_code': imdbCode,
+        'title': title,
+        'title_english': titleEnglish,
+        'title_long': titleLong,
+        'slug': slug,
+        'year': year,
+        'rating': rating,
+        'runtime': runtime,
+        'genres': genres,
+        'summary': summary,
+        'description_full': descriptionFull,
+        'synopsis': synopsis,
+        'yt_trailer_code': ytTrailerCode,
+        'language': language,
+        'mpa_rating': mpaRating,
+        'background_image': backgroundImage,
+        'background_image_original': backgroundImageOriginal,
+        'small_cover_image': smallCoverImage,
+        'medium_cover_image': mediumCoverImage,
+        'large_cover_image': largeCoverImage,
+        'state': state,
+        'torrents': torrents?.map((e) => e.toJson()).toList(),
+        'date_uploaded': dateUploaded,
+        'date_uploaded_unix': dateUploadedUnix,
+      };
 }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_new/feature/auth/ui/screens/forget_password/forget_password.dart';
 import 'package:flutter_application_new/feature/auth/ui/screens/login/login_screen.dart';
-import 'package:flutter_application_new/feature/movies/ui/screens/navigation/tabs/home/movie_details/movie_details.dart';
-import 'package:flutter_application_new/feature/movies/ui/screens/navigation/tabs/home/movies_home.dart';
+import 'package:flutter_application_new/feature/movies/ui/screens/navigation/tabs/home/home_details/home_details.dart';
+import 'package:flutter_application_new/feature/movies/ui/screens/navigation/tabs/navigaton_view.dart';
 import 'package:flutter_application_new/feature/movies/ui/widgets/update_profaile.dart';
 import 'package:flutter_application_new/feature/auth/ui/screens/onboarding/custom_onboarding.dart';
 import 'package:flutter_application_new/feature/auth/ui/screens/register/register.dart';
@@ -16,7 +16,7 @@ abstract final class AppRoutes {
       MaterialPageRoute(builder: (_) => const MovieOnboarding());
 
   static Route moviesHome() =>
-      MaterialPageRoute(builder: (_) => const MoviesHome());
+      MaterialPageRoute(builder: (_) => const NavigationView());
 
   static Route login() =>
       MaterialPageRoute(builder: (_) => const LoginScreen());
@@ -31,7 +31,7 @@ abstract final class AppRoutes {
       MaterialPageRoute(builder: (_) => const UpdateProfaile());
 
   static Route movieDetails(String image) =>
-      MaterialPageRoute(builder: (_) => MoviesDetails(image: image));
+      MaterialPageRoute(builder: (_) => HomeDetails(image: image));
 
   /// ويدجيت افتراضية في حال حدوث خطأ في التوجيه
   static Route unDefinedRoute() => MaterialPageRoute(

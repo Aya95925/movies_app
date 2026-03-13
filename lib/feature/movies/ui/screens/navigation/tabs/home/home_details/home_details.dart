@@ -4,8 +4,8 @@ import 'package:flutter_application_new/feature/movies/ui/widgets/custom_movie_b
 import 'package:flutter_application_new/feature/movies/ui/widgets/movie_details_section.dart';
 import 'package:flutter_application_new/feature/movies/ui/widgets/movie_header.dart';
 
-class MoviesDetails extends StatelessWidget {
-  const MoviesDetails({super.key, required this.image});
+class HomeDetails extends StatelessWidget {
+  const HomeDetails({super.key, required this.image});
   final String image;
 
   @override

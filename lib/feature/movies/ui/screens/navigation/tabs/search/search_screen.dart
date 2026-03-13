@@ -4,8 +4,8 @@ import 'package:flutter_application_new/core/utils/app_colors.dart';
 import 'package:flutter_application_new/core/utils/extension/int_extensions.dart';
 import 'package:flutter_application_new/feature/auth/ui/widgets/text_field.dart';
 
-class SearchScreen extends StatelessWidget {
-  const SearchScreen({super.key});
+class SearchTab extends StatelessWidget {
+  const SearchTab({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -6,7 +6,7 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 @module
 abstract class GitItModule {
-  Connectivity createConnectivity() => createConnectivity();
+  Connectivity createConnectivity() => Connectivity();
   @singleton
   Dio createDio() {
     Dio dio = Dio(BaseOptions(baseUrl: ApiConstant.baseUrl));

@@ -5,8 +5,8 @@ import 'package:injectable/injectable.dart';
 class MovieMapper {
   Movie toMovie(RemoteMovies remoteMovies) {
     return Movie(
-      id: remoteMovies.id ?? '',
-      title: remoteMovies.title ?? '',
+      id: remoteMovies.id ,
+      title: remoteMovies.title ,
       year: remoteMovies.year,
       rating: remoteMovies.rating,
       image: remoteMovies.backgroundImage,

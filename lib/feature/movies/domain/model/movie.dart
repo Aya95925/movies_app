@@ -1,11 +1,14 @@
+// Movie.dart
+import 'package:flutter_application_new/feature/network/models/response/movies/remote_movies.dart';
+
 class Movie {
   final String? id;
   final String? title;
-  final int ?year;
-  final double ?rating;
-  final String ?image;
+  final int? year;
+  final double? rating;
+  final String? image;
   final List<String>? genres;
-  final String ?summary;
+  final String? summary;
 
   const Movie({
     required this.id,
@@ -16,4 +19,16 @@ class Movie {
     required this.genres,
     required this.summary,
   });
+
+  factory Movie.fromRemote(RemoteMovies remote) {
+    return Movie(
+      id: remote.id,
+      title: remote.title,
+      year: remote.year,
+      rating: remote.rating,
+      image: remote.mediumCoverImage,
+      genres: remote.genres,
+      summary: remote.summary,
+    );
+  }
 }
