@@ -8,6 +8,7 @@ class CustomTextField extends StatefulWidget {
   final bool isPassword;
   final bool initialObscure;
   final TextEditingController? controller;
+  final void Function(String)? onChanged;
 
   const CustomTextField({
     super.key,
@@ -17,6 +18,7 @@ class CustomTextField extends StatefulWidget {
     this.isPassword = false,
     this.initialObscure = false,
     this.controller,
+    this.onChanged,
   });
 
   @override
@@ -39,7 +41,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
         color: const Color(0xFF2B2B2B),
         borderRadius: BorderRadius.circular(16),
       ),
-      child: TextField(
+      child: TextFormField(
+        onChanged: widget.onChanged,
         controller: widget.controller,
         obscureText: obscure,
         style: const TextStyle(color: AppColors.white, fontFamily: "Roboto"),

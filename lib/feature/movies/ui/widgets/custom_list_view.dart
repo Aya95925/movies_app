@@ -4,6 +4,7 @@ import 'package:flutter_application_new/core/utils/app_colors.dart';
 import 'package:flutter_application_new/core/utils/resources.dart';
 import 'package:flutter_application_new/feature/movies/ui/screens/navigation/tabs/home/cubit/home_cubit.dart';
 import 'package:flutter_application_new/feature/movies/ui/screens/navigation/tabs/home/cubit/home_state.dart';
+import 'package:flutter_application_new/feature/movies/ui/widgets/custom_rating.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CustomListView extends StatelessWidget {
@@ -31,11 +32,21 @@ class CustomListView extends StatelessWidget {
                   padding: const EdgeInsets.only(right: 16),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(16),
-                    child: Image.network(
-                      filterMovies[index].image ?? AppAssets.groub13,
-                      width: MediaQuery.of(context).size.width * .4,
-                      height: MediaQuery.of(context).size.height * .3,
-                      fit: BoxFit.cover,
+                    child: Stack(
+                      children: [
+                        /// الصورة
+                        Image.network(
+                          filterMovies[index].image ?? AppAssets.groub13,
+                          width: MediaQuery.of(context).size.width * .4,
+                          height: MediaQuery.of(context).size.height * .3,
+                          fit: BoxFit.cover,
+                        ),
+
+                        /// Widget فوق الصورة
+                        CustomRating(
+                          rating: filterMovies[index].rating.toString(),
+                        ),
+                      ],
                     ),
                   ),
                 );
@@ -58,3 +69,4 @@ class CustomListView extends StatelessWidget {
     );
   }
 }
+
