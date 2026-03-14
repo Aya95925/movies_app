@@ -11,4 +11,6 @@ abstract class ApiClient {
   factory ApiClient(Dio dio) = _ApiClient;
   @GET('/api/v2/list_movies.json')
   Future<HttpResponse<RemoteMoviesResponse>> getMovies();
+  @GET('/api/v2/list_movies.json')
+  Future<HttpResponse<RemoteMoviesResponse>> searchMovies(@Query("query_term") String query,);
 }
