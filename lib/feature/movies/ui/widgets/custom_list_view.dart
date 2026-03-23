@@ -1,28 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_new/core/utils/app_assets.dart';
+import 'package:flutter_application_new/core/utils/app_routes.dart';
+import 'package:flutter_application_new/feature/movies/domain/entities/movie_entity.dart';
+import 'package:flutter_application_new/feature/movies/ui/widgets/movie_card.dart';
 
 class CustomListView extends StatelessWidget {
-  const CustomListView({super.key});
+  final List<MovieEntity> movies;
+  const CustomListView({super.key, required this.movies});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: ListView.builder(
-        itemCount: 10,
-
+        itemCount: movies.length,
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
+          final movie = movies[index];
           return Padding(
             padding: const EdgeInsets.only(right: 16),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: Image.asset(
-                AppAssets.groub13,
-                width: MediaQuery.of(context).size.width * .4,
-                height: MediaQuery.of(context).size.height * .26,
-                fit: BoxFit.cover,
-              ),
+            child: MovieCard(
+              movie: movie,
+              width: MediaQuery.of(context).size.width * .4,
+              onTap: () {
+                AppRoutes.navigateToMovieDetails(context, movie.id);
+              },
             ),
           );
         },

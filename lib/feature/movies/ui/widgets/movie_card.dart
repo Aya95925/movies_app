@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_new/core/utils/app_colors.dart';
-import 'package:flutter_application_new/model/movies_model.dart';
+import 'package:flutter_application_new/feature/movies/domain/entities/movie_entity.dart';
 
 class MovieCard extends StatelessWidget {
-  final MovieModel movie;
+  final MovieEntity movie;
   final double? width;
   final double? height;
   final VoidCallback? onTap;
@@ -26,9 +26,27 @@ class MovieCard extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(16),
           child: Stack(
+            fit: StackFit.expand,
             children: [
-              Positioned.fill(
-                child: Image.asset(movie.image, fit: BoxFit.cover),
+              Image.network(
+                movie.mediumCoverImage,
+                fit: BoxFit.cover,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Container(
+                    color: AppColors.lightBlack,
+                    child: const Center(
+                      child: CircularProgressIndicator(
+                        color: AppColors.goldenYellow,
+                        strokeWidth: 2,
+                      ),
+                    ),
+                  );
+                },
+                errorBuilder: (context, error, stackTrace) => Container(
+                  color: AppColors.lightBlack,
+                  child: const Icon(Icons.broken_image, color: AppColors.white),
+                ),
               ),
               Positioned(
                 top: 5,
@@ -39,13 +57,13 @@ class MovieCard extends StatelessWidget {
                     vertical: 2,
                   ),
                   decoration: BoxDecoration(
-                    color: const Color(0xCC121312),
+                    color: AppColors.black.withOpacity(0.7),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(
                     children: [
                       Text(
-                        movie.rating.toString(),
+                        movie.rating.toStringAsFixed(1),
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 12,

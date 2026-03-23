@@ -6,7 +6,7 @@ abstract final class AppAssets {
   static const String iconGoogle = 'assets/images/icon_google.png';
 
   // Auth & Profile
-  static const String forgotPassword = 'assets/images/forgot_password.png';
+  static const String forgotPassword = 'assets/images/Forgot_password.png';
   static const String avatar = 'assets/images/avataer.png';
   static const String avatarProfile = 'assets/images/profile_avataer.png';
   static const String profileAvatar = 'assets/images/profile_avataer.png';
@@ -39,7 +39,7 @@ abstract final class AppAssets {
   static const String profileIcon = 'assets/icons/profile.png';
 
   // Movie Posters (for MoviesHome screen)
-  static const String searchEmptyState = 'assets/images/search_empty.png';
+  static const String searchEmptyState = 'assets/images/Empty 1.png';
 
   //Movie avatar image
   static const String avatar1 = 'assets/images/avatar1.png';

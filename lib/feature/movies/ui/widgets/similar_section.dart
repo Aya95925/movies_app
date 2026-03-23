@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_new/core/utils/app_assets.dart';
-import 'package:flutter_application_new/feature/movies/ui/widgets/similar_card.dart';
-import 'package:flutter_application_new/model/movies_model.dart';
+import 'package:flutter_application_new/core/utils/app_colors.dart';
+import 'package:flutter_application_new/core/utils/resources.dart';
+import 'package:flutter_application_new/feature/movies/ui/presentation/screens/details/cubit/details_state.dart';
+import 'package:flutter_application_new/feature/movies/ui/presentation/screens/details/cubit/movie_detail_cubit.dart';
+import 'package:flutter_application_new/feature/movies/ui/widgets/movie_grid_section.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SimilarMoviesSection extends StatelessWidget {
-  SimilarMoviesSection({super.key});
-
-  final List<MovieModel> movies = [
-    MovieModel(image: AppAssets.groub13, rating: 7.7),
-    MovieModel(image: AppAssets.groub14, rating: 7.7),
-    MovieModel(image: AppAssets.groub13, rating: 7.7),
-    MovieModel(image: AppAssets.groub14, rating: 7.7),
-  ];
+class _SimilarMoviesSection extends StatelessWidget {
+  const _SimilarMoviesSection();
 
   @override
   Widget build(BuildContext context) {
@@ -26,22 +22,53 @@ class SimilarMoviesSection extends StatelessWidget {
             color: Colors.white,
           ),
         ),
-
         const SizedBox(height: 16),
 
-        /// Grid
-        GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: movies.length,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 16,
-            mainAxisSpacing: 16,
-            childAspectRatio: 0.65,
-          ),
-          itemBuilder: (context, index) {
-            return SimilarMovieCard(movie: movies[index]);
+        BlocBuilder<DetailsCubit, DetailsState>(
+          buildWhen: (previous, current) =>
+              previous.similarMovies != current.similarMovies,
+          builder: (context, state) {
+            final similarMoviesStatus = state.similarMovies.status;
+            final similarMoviesData = state.similarMovies.data;
+            final similarMoviesError = state.similarMovies.errorMessage;
+
+            switch (similarMoviesStatus) {
+              case ApiStatus.loading:
+              case ApiStatus.initial:
+                return const SizedBox(
+                  height: 200,
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      color: AppColors.goldenYellow,
+                    ),
+                  ),
+                );
+
+              case ApiStatus.error:
+                return SizedBox(
+                  height: 200,
+                  child: Center(
+                    child: Text(
+                      similarMoviesError ?? "Failed to load movies",
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  ),
+                );
+
+              case ApiStatus.success:
+                if (similarMoviesData == null || similarMoviesData.isEmpty) {
+                  return const SizedBox(
+                    height: 200,
+                    child: Center(
+                      child: Text(
+                        "No similar movies found",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  );
+                }
+                return MovieGridSection(movies: similarMoviesData);
+            }
           },
         ),
       ],

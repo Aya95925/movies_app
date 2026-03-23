@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "305649797518",
+    "firebase_url": "https://movies-auth-55dab-default-rtdb.firebaseio.com",
     "project_id": "movies-auth-55dab",
     "storage_bucket": "movies-auth-55dab.firebasestorage.app"
   },

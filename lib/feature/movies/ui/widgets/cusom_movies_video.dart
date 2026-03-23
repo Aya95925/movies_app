@@ -6,7 +6,7 @@ class CustomMoviesVideo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CircleAvatar(
+    return const CircleAvatar(
       radius: 48,
       backgroundColor: AppColors.goldenYellow,
       child: CircleAvatar(

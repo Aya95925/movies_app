@@ -1,45 +1,32 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_new/feature/splash/presentaion/screens/custom_splash.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter_application_new/core/di/di.dart';
+import 'package:flutter_application_new/core/utils/app_routes.dart';
+import 'package:flutter_application_new/core/utils/app_theme.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
   await Firebase.initializeApp();
+  configureDependencies();
 
-  runApp(const MyApp());
+  FlutterNativeSplash.remove();
+
+  runApp(const MovieApp());
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+class MovieApp extends StatelessWidget {
+  const MovieApp({super.key});
 
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const CustomSplashScreen(),
-
-      // onGenerateRoute: (settings) {
-      //   switch (settings.name) {
-      //     case "/":
-      //       return AppRoutes.splash3
-      // 6();
-      //     case "/onboarding":
-      //       return AppRoutes.onboarding();
-      //     case "/moviesHome":
-      //       return AppRoutes.moviesHome();
-      //     case "/login":
-      //       return AppRoutes.login();
-      //     case "/register":
-      //       return AppRoutes.register();
-      //     default:
-      //       return AppRoutes.unDefinedRoute();
-      //   }
-      // },
+      theme: AppTheme.darkTheme,
+      initialRoute: AppRoutes.splashRoute,
+      onGenerateRoute: AppRoutes.onGenerateRoute,
     );
   }
 }

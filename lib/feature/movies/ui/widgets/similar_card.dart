@@ -4,20 +4,20 @@ import 'package:flutter_application_new/model/movies_model.dart';
 class SimilarMovieCard extends StatelessWidget {
   const SimilarMovieCard({super.key, required this.movie});
 
-  final MovieModel movie;
+  final Movie movie;
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        /// Movie Poster
         ClipRRect(
           borderRadius: BorderRadius.circular(16),
-          child: Image.asset(
-            movie.image,
+          child: Image.network(
+            movie.mediumCoverImage,
             fit: BoxFit.cover,
             width: double.infinity,
             height: double.infinity,
+            errorBuilder: (c, e, s) => const Icon(Icons.error),
           ),
         ),
 

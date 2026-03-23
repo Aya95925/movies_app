@@ -6,6 +6,8 @@ class CustomTextField extends StatefulWidget {
   final IconData? suffixIcon;
   final String? hint;
   final bool isPassword;
+  // تعديل: جعل الـ Function تستقبل String وتكون اختيارية لتجنب الأخطاء
+  final Function(String)? onChanged;
   final bool initialObscure;
   final TextEditingController? controller;
 
@@ -17,6 +19,7 @@ class CustomTextField extends StatefulWidget {
     this.isPassword = false,
     this.initialObscure = false,
     this.controller,
+    this.onChanged, // جعلناها اختيارية
   });
 
   @override
@@ -29,6 +32,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   void initState() {
     super.initState();
+    // تهيئة حالة إخفاء النص بناءً على نوع الحقل
     obscure = widget.isPassword ? true : widget.initialObscure;
   }
 
@@ -40,6 +44,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
         borderRadius: BorderRadius.circular(16),
       ),
       child: TextField(
+        // الحل هنا: نستخدم widget.onChanged مباشرة
+        onChanged: widget.onChanged,
         controller: widget.controller,
         obscureText: obscure,
         style: const TextStyle(color: AppColors.white, fontFamily: "Roboto"),
@@ -50,7 +56,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
             fontFamily: "Roboto",
           ),
           prefixIcon: Icon(widget.prefixIcon, color: AppColors.white),
-
           suffixIcon: widget.isPassword
               ? IconButton(
                   icon: Icon(
@@ -62,7 +67,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
               : (widget.suffixIcon != null
                     ? Icon(widget.suffixIcon, color: AppColors.white)
                     : null),
-
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(
             vertical: 18,

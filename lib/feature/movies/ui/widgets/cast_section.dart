@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_new/core/utils/app_colors.dart';
 import 'package:flutter_application_new/core/utils/app_theme.dart';
-import 'package:flutter_application_new/model/cast_model.dart';
+import 'package:flutter_application_new/feature/movies/domain/entities/movie_entity.dart'; // تأكد من المسار الصحيح للـ Entity
 
 class CastSection extends StatelessWidget {
   const CastSection({super.key, required this.castList});
-  final List<CastModel> castList;
+  final List<CastEntity> castList;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class CastSection extends StatelessWidget {
     );
   }
 
-  Widget customContainerCast(CastModel cast) {
+  Widget customContainerCast(CastEntity cast) {
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.all(12),
@@ -37,12 +37,22 @@ class CastSection extends StatelessWidget {
       ),
       child: Row(
         children: [
+          // تعديل: استخدام NetworkImage وتحديد الحجم
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: Image.asset(cast.image, fit: BoxFit.cover),
+            child: cast.urlSmallImage != null
+                ? Image.network(
+                    cast.urlSmallImage!,
+                    width: 70,
+                    height: 90,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) =>
+                        Container(width: 70, height: 90, color: Colors.grey),
+                  )
+                : Container(width: 70, height: 90, color: Colors.grey),
           ),
 
-          const SizedBox(width: 10),
+          const SizedBox(width: 15),
 
           Expanded(
             child: Column(
@@ -50,16 +60,20 @@ class CastSection extends StatelessWidget {
               children: [
                 Text(
                   'Name : ${cast.name}',
-                  style: TextStyle(color: AppColors.white, fontSize: 20),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
 
-                const SizedBox(height: 4),
+                const SizedBox(height: 6),
 
                 Text(
-                  'Character : ${cast.character}',
-                  style: TextStyle(color: AppColors.white, fontSize: 20),
+                  'Character : ${cast.characterName}',
+                  style: const TextStyle(color: Colors.white70, fontSize: 16),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),

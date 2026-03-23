@@ -2,54 +2,42 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_new/core/utils/app_colors.dart';
 
 class GenresSection extends StatelessWidget {
-  const GenresSection({super.key});
-
-  final List<String> genres = const [
-    "Action",
-    "Sci-Fi",
-    "Adventure",
-    "Fantasy",
-    "Horror",
-  ];
+  final List<String> genres;
+  const GenresSection({super.key, required this.genres});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        /// Title
         const Text(
           "Genres",
           style: TextStyle(
-            fontSize: 32,
+            fontSize: 24,
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
         ),
-
         const SizedBox(height: 20),
-
-        /// Chips List
         Wrap(
-          spacing: 16,
-          runSpacing: 16,
+          spacing: 12,
+          runSpacing: 12,
           children: genres.map((genre) => _genreItem(genre)).toList(),
         ),
       ],
     );
   }
 
-  /// Genre Chip Design
   Widget _genreItem(String genre) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
         color: AppColors.lightBlack,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Text(
         genre,
-        style: TextStyle(color: AppColors.white, fontSize: 20),
+        style: const TextStyle(color: AppColors.white, fontSize: 14),
       ),
     );
   }
